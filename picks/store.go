@@ -37,16 +37,26 @@ func (s *Store) Pick(userId int, p *Pick) (err error) {
 	return
 }
 
-func (s *Store) UpdateLine(id string, spread, overUnder float64) (err error) {
+func (s *Store) UpdateLine(line *Line) (err error) {
 	query := `UPDATE games
 		SET
-			game_spread       = ?,
-			game_over_under   = ?,
-			game_line_updated = NOW()
+			game_spread       = $2,
+			game_over_under   = $3,
+			game_line_updated = $4
 		WHERE
-			game_id            = ?
+			game_id            = $1
 	`
-	_, err = s.db.Exec(query, spread, overUnder, id)
+	result, err := s.db.Exec(query, line.GameId, line.Spread, line.OverUnder, line.Updated)
+	if err != nil {
+		return
+	}
+	n, err := result.RowsAffected()
+	if err != nil {
+		return
+	}
+	if n != 1 {
+		return fmt.Errorf("Store.UpdateLine: Expected to update one row, updated %d", n)
+	}
 	return
 }
 
@@ -63,13 +73,13 @@ func (s *Store) NewGame(g *Game) (err error) {
 func (s *Store) GameScore(id string, away, home int) (err error) {
 	query := `UPDATE games
 		SET
-			game_score_away = ?,
-			game_score_home = ?
+			game_score_away    = $2,
+			game_score_home    = $3
 			game_score_updated = NOW()
 		WHERE
-			game_id = ?
+			game_id            = $1
 	`
-	_, err = s.db.Exec(query, away, home, id)
+	_, err = s.db.Exec(query, id, away, home)
 	return
 }
 
@@ -206,7 +216,7 @@ func (s *Store) Setup() (err error) {
 		},
 	}
 
-	if _, err = s.db.Exec("SET TIMEZONE 'America/New_York'"); err != nil {
+	if _, err = s.db.Exec("SET TIME ZONE 'America/New_York'"); err != nil {
 		return
 	}
 
