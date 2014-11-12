@@ -22,6 +22,7 @@ type Game struct {
 }
 
 type Line struct {
+	GameId    string
 	Spread    float64
 	OverUnder float64
 	Updated   time.Time
