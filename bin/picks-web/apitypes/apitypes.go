@@ -25,3 +25,8 @@ type PicksSubmitIn struct {
 	UserId int64
 	Picks  []picks.Pick
 }
+
+type PicksSubmitOut struct {
+	Valid []bool
+	Saved bool
+}
