@@ -3,6 +3,7 @@ package nfl
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/jbaikge/nfl-picks/picks"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -41,47 +42,16 @@ var (
 	LiveEndpoint = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"
 )
 
-func CurrentGames() (year, week int, games []Game, err error) {
-	return GetGames(LiveEndpoint)
+func CurrentGames() (year, week int, games []*picks.Game, err error) {
+	return getGames(LiveEndpoint)
 }
 
-func GamesFor(year, week int) (games []Game, err error) {
-	u, err := DataURL(year, "REG", week)
+func GamesFor(year, week int) (games []*picks.Game, err error) {
+	u, err := dataURL(year, "REG", week)
 	if err != nil {
 		return
 	}
-	_, _, games, err = GetGames(u.String())
-	return
-}
-
-func GetGames(url string) (year, week int, games []Game, err error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return
-	}
-	defer resp.Body.Close()
-
-	dec := xml.NewDecoder(resp.Body)
-	ss := new(ScoreStrip)
-	if err = dec.Decode(ss); err != nil {
-		return
-	}
-
-	week = ss.GameSet.Week
-	year = ss.GameSet.Year
-	games = ss.GameSet.Games
-	return
-}
-
-func DataURL(seasonYear int, seasonType string, week int) (u *url.URL, err error) {
-	if u, err = url.Parse(DataEndpoint); err != nil {
-		return
-	}
-	values := u.Query()
-	values.Set("season", fmt.Sprint(seasonYear))
-	values.Set("seasonType", seasonType)
-	values.Set("week", fmt.Sprint(week))
-	u.RawQuery = values.Encode()
+	_, _, games, err = getGames(u.String())
 	return
 }
 
@@ -108,4 +78,52 @@ func (g Game) TimeLeft() (d time.Duration) {
 		return
 	}
 	return min*time.Minute + sec*time.Second
+}
+
+func dataURL(seasonYear int, seasonType string, week int) (u *url.URL, err error) {
+	if u, err = url.Parse(DataEndpoint); err != nil {
+		return
+	}
+	values := u.Query()
+	values.Set("season", fmt.Sprint(seasonYear))
+	values.Set("seasonType", seasonType)
+	values.Set("week", fmt.Sprint(week))
+	u.RawQuery = values.Encode()
+	return
+}
+
+func getGames(url string) (year, week int, games []*picks.Game, err error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	dec := xml.NewDecoder(resp.Body)
+	ss := new(ScoreStrip)
+	if err = dec.Decode(ss); err != nil {
+		return
+	}
+
+	week = ss.GameSet.Week
+	year = ss.GameSet.Year
+	nflGames = ss.GameSet.Games
+
+	games = make([]*picks.Game, len(nflGames))
+	for i, ng := range nflGames {
+		games[i] = &picks.Game{
+			Id:        picks.GameId(ng.Away, ng.Home, ng.Start()),
+			Year:      year,
+			Week:      week,
+			Start:     ng.Start(),
+			TimeLeft:  ng.TimeLeft(),
+			Posession: ng.Posession,
+			Home:      ng.Home,
+			HomeScore: ng.HomeScore,
+			Away:      ng.Away,
+			AwayScore: ng.AwayScore,
+			Quarter:   picks.Quarter(in.Quarter),
+		}
+	}
+	return
 }

@@ -3,6 +3,7 @@ package oddsmaker
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/jbaikge/nfl-picks/picks"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -20,13 +21,13 @@ type FeedItem struct {
 	PubDate string   `xml:"pubdate"`
 }
 
-type Odds struct {
-	Home     TeamOdds
-	Away     TeamOdds
+type Line struct {
+	Home     TeamLine
+	Away     TeamLine
 	GameTime time.Time
 }
 
-type TeamOdds struct {
+type TeamLine struct {
 	Name   string
 	Spread float64
 	Total  float64
@@ -56,7 +57,7 @@ func CurrentFeed() (feed *Feed, err error) {
 	return
 }
 
-func CurrentOdds() (odds []Odds, err error) {
+func CurrentLines() (odds []picks.Line, err error) {
 	f, err := CurrentFeed()
 	if err != nil {
 		return
@@ -90,6 +91,8 @@ func (item *FeedItem) Odds() (o Odds, err error) {
 	}
 	return
 }
+
+func (o *Odds) 
 
 func buildTeam(name, spread, total, money string) (team TeamOdds, err error) {
 	if team.Name, err = translateName(name); err != nil {
