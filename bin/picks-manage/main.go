@@ -8,34 +8,7 @@ import (
 	"os"
 )
 
-var dsn = flag.String("dsn", "picks.sqlite3", "Data Source Name")
-
-// func importGames(s *picks.Store, year, week int) (err error) {
-// 	games, err := nfl.GamesFor(year, week)
-// 	if err != nil {
-// 		return
-// 	}
-// 	for _, g := range games {
-// 		if err = s.SaveGame(convert(g, year, week)); err != nil {
-// 			log.Printf("Game: %+v", g)
-// 			return
-// 		}
-// 	}
-// 	return
-// }
-
-// func importOdds() (err error) {
-// 	odds, err := oddsmaker.CurrentOdds()
-// 	if err != nil {
-// 		log.Fatalf("CurrentOdds: %s", err)
-// 	}
-// 	for _, o := range odds {
-// 		if err = s.SaveOdds(o); err != nil {
-// 			log.Printf("Odds: %+v", o)
-// 			return
-// 		}
-// 	}
-// }
+var dsn = flag.String("dsn", "postgres://svxnazhqdteqvj:kgaD6ehDzHcFoyEZ08V81yU-rw@ec2-54-197-237-120.compute-1.amazonaws.com:5432/d1546lf8imhfit", "Data Source Name")
 
 func main() {
 	flag.Parse()
@@ -65,21 +38,4 @@ func main() {
 		fmt.Printf("There was an error while processing %s:\n%s\n", cmd.Operation, err)
 		os.Exit(1)
 	}
-
-	// if y, w := *importYear, *importWeek; y > 0 && w > 0 {
-	// 	if err := importGames(s, y, w); err != nil {
-	// 		log.Fatalf("importGames %d %d: %s", y, w, err)
-	// 	}
-	// }
-	// if y, w := *importYear, *importWeek; y > 0 && w == 0 {
-	// 	for i := 1; i <= 17; i++ {
-	// 		if err := importGames(s, y, i); err != nil {
-	// 			log.Fatalf("importGames for %d: %s", y, err)
-	// 		}
-	// 	}
-	// }
-	// if *importOdds {
-	// 	importOdds()
-	// }
-
 }

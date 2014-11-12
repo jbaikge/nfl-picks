@@ -2,7 +2,7 @@ package picks
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 type Store struct {
@@ -14,7 +14,7 @@ func NewStore(dataSourceName string) (s *Store, err error) {
 	s = &Store{
 		dsn: dataSourceName,
 	}
-	if s.db, err = sql.Open("sqlite3", dataSourceName); err != nil {
+	if s.db, err = sql.Open("postgres", dataSourceName); err != nil {
 		return
 	}
 	err = s.Setup()
@@ -35,16 +35,12 @@ func (s *Store) SavePick(userId int, p *Pick) (err error) {
 	return
 }
 
-func (s *Store) SavePickSet(u *User, p *PickSet) (err error) {
-	return
-}
-
 func (s *Store) SaveLine(id string, spread, overUnder float64) (err error) {
 	query := `UPDATE games
 		SET
-			game_spread        = ?,
-			game_over_under    = ?,
-			game_lines_updated = NOW()
+			game_spread       = ?,
+			game_over_under   = ?,
+			game_line_updated = NOW()
 		WHERE
 			game_id            = ?
 	`
@@ -55,7 +51,7 @@ func (s *Store) SaveLine(id string, spread, overUnder float64) (err error) {
 func (s *Store) SaveGame(g *Game) (err error) {
 	id := g.Id
 	if g.Id == "" {
-		id = GameId(g.HomeId, g.AwayId, g.Start)
+		id = GameId(g.Away, g.Home, g.Start)
 	}
 	// Stage 1: Try to update existing game
 	update := `UPDATE games SET game_score_home = ?, game_score_away = ?, game_quarter = ? WHERE game_id = ?`
@@ -73,14 +69,14 @@ func (s *Store) SaveGame(g *Game) (err error) {
 		VALUES
 		(?,       ?,            ?,          ?,            ?,            ?,               ?,               ?,          ?,            ?,         ?        )
 	`
-	_, err = s.db.Exec(insert, id, g.EventId, g.HomeId, g.HomeId, g.AwayId, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
+	_, err = s.db.Exec(insert, id, g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
 	return
 }
 
 func (s *Store) Setup() (err error) {
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS stadiums (
-			stadium_id    TEXT PRIMARY KEY,
+			stadium_id    VARCHAR(3) NOT NULL UNIQUE,
 			stadium_name  TEXT NOT NULL,
 			stadium_city  TEXT NOT NULL,
 			stadium_state TEXT NOT NULL,
@@ -122,11 +118,11 @@ func (s *Store) Setup() (err error) {
 			("ARI", "University of Phoenix Stadium", "Glendale", "Arizona", "Bermuda Grass", "Retractable")
 		`,
 		`CREATE TABLE IF NOT EXISTS teams (
-			team_id       TEXT PRIMARY KEY,
-			team_city     TEXT NOT NULL,
-			team_name     TEXT NOT NULL,
-			team_league   TEXT NOT NULL,
-			team_division TEXT NOT NULL
+			team_id       VARCHAR(3) NOT NULL UNIQUE,
+			team_city     VARCHAR(16) NOT NULL,
+			team_name     VARCHAR(16) NOT NULL,
+			team_league   CHAR(3) NOT NULL,
+			team_division CHAR(1) NOT NULL
 		)`,
 		`INSERT OR IGNORE INTO teams VALUES
 			("ARI", "Arizona",       "Cardinals",  "NFC", "W"),
@@ -163,20 +159,20 @@ func (s *Store) Setup() (err error) {
 			("WAS", "Washington",    "Redskins",   "NFC", "E")
 		`,
 		`CREATE TABLE IF NOT EXISTS games (
-			game_id            TEXT PRIMARY KEY,
-			nfl_event_id       INTEGER NOT NULL DEFAULT 0,
-			stadium_id         TEXT NOT NULL REFERENCES stadiums (stadium_id),
-			team_id_away       TEXT NOT NULL REFERENCES teams (team_id),
-			team_id_home       TEXT NOT NULL REFERENCES teams (team_id),
-			game_score_away    INTEGER NOT NULL DEFAULT 0,
-			game_score_home    INTEGER NOT NULL DEFAULT 0,
-			game_start         TIMESTAMP,
-			game_quarter       TEXT NOT NULL DEFAULT "",
-			game_week          INTEGER NOT NULL DEFAULT 0,
-			game_year          INTEGER NOT NULL DEFAULT 0,
-			game_spread        FLOAT(5,2) NOT NULL DEFAULT 0.0,
-			game_over_under    FLOAT(5,2) NOT NULL DEFAULT 0.0,
-			game_lines_updated DATETIME
+			game_id           TEXT PRIMARY KEY,
+			nfl_event_id      INTEGER NOT NULL DEFAULT 0,
+			stadium_id        TEXT NOT NULL REFERENCES stadiums (stadium_id),
+			team_id_away      VARCHAR(3) NOT NULL REFERENCES teams (team_id),
+			team_id_home      VARCHAR(3) NOT NULL REFERENCES teams (team_id),
+			game_score_away   INTEGER NOT NULL DEFAULT 0,
+			game_score_home   INTEGER NOT NULL DEFAULT 0,
+			game_start        TIMESTAMP,
+			game_quarter      TEXT NOT NULL DEFAULT "",
+			game_week         INTEGER NOT NULL DEFAULT 0,
+			game_year         INTEGER NOT NULL DEFAULT 0,
+			game_spread       FLOAT(5,2) NOT NULL DEFAULT 0.0,
+			game_over_under   FLOAT(5,2) NOT NULL DEFAULT 0.0,
+			game_line_updated DATETIME
 		)`,
 		`INSERT OR IGNORE INTO games (game_id, game_spread, game_over_under) VALUES
 			("GBvSEA@20140904",   -5.5, 46.0),

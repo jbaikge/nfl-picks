@@ -59,20 +59,3 @@ func (ig *ImportGames) Do(s *picks.Store, args []string) (err error) {
 
 	return
 }
-
-func (ig *ImportGames) convert(in nfl.Game, year, week int) (out *picks.Game) {
-	out = &picks.Game{
-		Week:      week,
-		Year:      year,
-		Start:     in.Start(),
-		TimeLeft:  in.TimeLeft(),
-		Posession: in.Posession,
-		HomeId:    in.Home,
-		HomeScore: in.HomeScore,
-		AwayId:    in.Away,
-		AwayScore: in.AwayScore,
-		Quarter:   picks.Quarter(in.Quarter),
-	}
-	out.EventId, _ = strconv.ParseInt(in.EventId, 10, 64)
-	return
-}
