@@ -33,7 +33,7 @@ func (s *Store) NewGame(g *Game) (err error) {
 		VALUES
 		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11      )
 	`
-	_, err = s.db.Exec(insert, g.Id, g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
+	_, err = s.db.Exec(insert, g.Id.String(), g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
 	return
 }
 
@@ -56,7 +56,7 @@ func (s *Store) UpdateLine(line *Line) (err error) {
 		WHERE
 			game_id            = $1
 	`
-	result, err := s.db.Exec(query, line.GameId, line.Spread, line.OverUnder, line.Updated)
+	result, err := s.db.Exec(query, line.GameId.String(), line.Spread, line.OverUnder, line.Updated)
 	if err != nil {
 		return
 	}
@@ -82,7 +82,7 @@ func (s *Store) UpdateGame(g *Game) (err error) {
 		WHERE
 			game_id            = $1
 	`
-	_, err = s.db.Exec(query, g.Id, g.AwayScore, g.HomeScore, g.Posession, g.Quarter, g.TimeLeft)
+	_, err = s.db.Exec(query, g.Id.String(), g.AwayScore, g.HomeScore, g.Posession, g.Quarter, g.TimeLeft)
 	return
 }
 
