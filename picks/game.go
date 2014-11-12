@@ -2,11 +2,14 @@ package picks
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
+type GameIdType string
+
 type Game struct {
-	Id        string
+	Id        GameIdType
 	EventId   int64
 	Year      int
 	Week      int
@@ -22,12 +25,26 @@ type Game struct {
 }
 
 type Line struct {
-	GameId    string
+	GameId    GameIdType
 	Spread    float64
 	OverUnder float64
 	Updated   time.Time
 }
 
-func GameId(away, home string, date time.Time) (id string) {
-	return fmt.Sprintf("%sv%s@%s", away, home, date.Format("20060102"))
+func GameId(away, home string, date time.Time) (id GameIdType) {
+	return GameIdType(fmt.Sprintf("%sv%s@%s", away, home, date.Format("20060102")))
+}
+
+func (g GameIdType) Away() string {
+	s := g.String()
+	return s[:strings.Index(s, "v")]
+}
+
+func (g GameIdType) Home() string {
+	s := g.String()
+	return s[strings.Index(s, "v"):strings.Index(s, ":")]
+}
+
+func (g GameIdType) String() string {
+	return string(g)
 }

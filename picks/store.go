@@ -27,6 +27,16 @@ func (s *Store) Close() error {
 	return s.db.Close()
 }
 
+func (s *Store) NewGame(g *Game) (err error) {
+	insert := `INSERT INTO games
+		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year)
+		VALUES
+		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11      )
+	`
+	_, err = s.db.Exec(insert, g.Id, g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
+	return
+}
+
 func (s *Store) Pick(userId int, p *Pick) (err error) {
 	query := `INSERT OR REPLACE INTO picks
 		(user_id, game_id, pick_value)
@@ -60,26 +70,19 @@ func (s *Store) UpdateLine(line *Line) (err error) {
 	return
 }
 
-func (s *Store) NewGame(g *Game) (err error) {
-	insert := `INSERT INTO games
-		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year)
-		VALUES
-		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11      )
-	`
-	_, err = s.db.Exec(insert, g.Id, g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
-	return
-}
-
-func (s *Store) GameScore(id string, away, home int) (err error) {
+func (s *Store) UpdateGame(g *Game) (err error) {
 	query := `UPDATE games
 		SET
 			game_score_away    = $2,
-			game_score_home    = $3
+			game_score_home    = $3,
+			game_posession     = $4,
+			game_quarter       = $5,
+			game_timeleft      = $6,
 			game_score_updated = NOW()
 		WHERE
 			game_id            = $1
 	`
-	_, err = s.db.Exec(query, id, away, home)
+	_, err = s.db.Exec(query, g.Id, g.AwayScore, g.HomeScore, g.Posession, g.Quarter, g.TimeLeft)
 	return
 }
 

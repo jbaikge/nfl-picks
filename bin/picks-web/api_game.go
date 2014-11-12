@@ -18,7 +18,7 @@ func (api *Game) ImportWeek(in *apitypes.GameImportIn, out *apitypes.GameImportO
 		return
 	}
 	for _, g := range out.Games {
-		fmt.Printf("api.Game.ImportWeek: %s\n", g.Id)
+		fmt.Printf("api.Game.ImportWeek: %16s\n", g.Id)
 		if err = Store.NewGame(g); err != nil {
 			return
 		}
@@ -38,6 +38,25 @@ func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportO
 			return
 		}
 		out.Games = append(out.Games, resp.Games...)
+	}
+	return
+}
+
+func (api *Game) UpdateScores(in *Nil, out *apitypes.GameScoresOut) (err error) {
+	_, _, games, err := nfl.CurrentGames()
+	if err != nil {
+		return
+	}
+	out.Updated = make([]*picks.Game, 0, len(games))
+	for _, g := range games {
+		if g.Quarter == picks.Pregame {
+			continue
+		}
+		fmt.Printf("api.Game.UpdateScores: %16s %2d - %d\n", g.Id, g.AwayScore, g.HomeScore)
+		if err = Store.UpdateGame(g); err != nil {
+			return
+		}
+		out.Updated = append(out.Updated, g)
 	}
 	return
 }

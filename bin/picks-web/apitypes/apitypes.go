@@ -13,6 +13,15 @@ type GameImportOut struct {
 	Games []*picks.Game
 }
 
+type GameScoresOut struct {
+	Updated []*picks.Game
+}
+
 type LinesImportOut struct {
 	Lines []*picks.Line
+}
+
+type PicksSubmitIn struct {
+	UserId int64
+	Picks  []picks.Pick
 }
