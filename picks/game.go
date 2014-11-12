@@ -42,7 +42,7 @@ func (g GameIdType) Away() string {
 
 func (g GameIdType) Home() string {
 	s := g.String()
-	return s[strings.Index(s, "v"):strings.Index(s, ":")]
+	return s[strings.Index(s, "v")+1 : strings.Index(s, "@")]
 }
 
 func (g GameIdType) String() string {
