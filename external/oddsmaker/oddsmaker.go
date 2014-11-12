@@ -18,7 +18,7 @@ type Feed struct {
 type FeedItem struct {
 	XMLName xml.Name `xml:"item"`
 	Title   string   `xml:"title"`
-	PubDate string   `xml:"pubdate"`
+	PubDate string   `xml:"pubDate"`
 }
 
 type Line struct {
@@ -67,9 +67,11 @@ func CurrentLines() (lines []*picks.Line, err error) {
 	for _, item := range f.Items {
 		l, err := item.Line()
 		if err != nil {
+			fmt.Printf("Error converting to Line: %s\n", err)
 			continue
 		}
 		line := &picks.Line{
+			GameId:    picks.GameId(l.Away.Name, l.Home.Name, l.GameTime),
 			Spread:    l.Home.Spread,
 			OverUnder: l.Home.OverUnder,
 			Updated:   l.Updated,
@@ -143,6 +145,14 @@ func translateName(longName string) (id string, err error) {
 		"Seattle":      "SEA",
 		"Green Bay":    "GB",
 		"Phila.":       "PHI",
+		"Houston":      "HOU",
+		"Minnesota":    "MIN",
+		"Cincinnati":   "CIN",
+		"Washington":   "WAS",
+		"New England":  "NE",
+		"Cleveland":    "CLE",
+		"San Diego":    "SD",
+		"Indianapolis": "IND",
 	}
 	var ok bool
 	if id, ok = table[longName]; !ok {
