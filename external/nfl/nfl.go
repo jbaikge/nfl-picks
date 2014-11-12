@@ -124,6 +124,7 @@ func getGames(url string) (year, week int, games []*picks.Game, err error) {
 			AwayScore: ng.AwayScore,
 			Quarter:   picks.Quarter(ng.Quarter),
 		}
+		games[i].EventId, _ = strconv.ParseInt(ng.EventId, 10, 64)
 	}
 	return
 }
