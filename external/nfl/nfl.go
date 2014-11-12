@@ -107,7 +107,7 @@ func getGames(url string) (year, week int, games []*picks.Game, err error) {
 
 	week = ss.GameSet.Week
 	year = ss.GameSet.Year
-	nflGames = ss.GameSet.Games
+	nflGames := ss.GameSet.Games
 
 	games = make([]*picks.Game, len(nflGames))
 	for i, ng := range nflGames {
@@ -122,7 +122,7 @@ func getGames(url string) (year, week int, games []*picks.Game, err error) {
 			HomeScore: ng.HomeScore,
 			Away:      ng.Away,
 			AwayScore: ng.AwayScore,
-			Quarter:   picks.Quarter(in.Quarter),
+			Quarter:   picks.Quarter(ng.Quarter),
 		}
 	}
 	return
