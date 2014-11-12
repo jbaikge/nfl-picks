@@ -25,13 +25,14 @@ type Line struct {
 	Home     TeamLine
 	Away     TeamLine
 	GameTime time.Time
+	Updated  time.Time
 }
 
 type TeamLine struct {
-	Name   string
-	Spread float64
-	Total  float64
-	Money  float64
+	Name      string
+	Spread    float64
+	OverUnder float64
+	Money     float64
 }
 
 const DateLayout = "Jan 02, 2006 03:04 PM"
@@ -57,51 +58,57 @@ func CurrentFeed() (feed *Feed, err error) {
 	return
 }
 
-func CurrentLines() (odds []picks.Line, err error) {
+func CurrentLines() (lines []*picks.Line, err error) {
 	f, err := CurrentFeed()
 	if err != nil {
 		return
 	}
-	odds = make([]Odds, 0, len(f.Items))
+	lines = make([]*picks.Line, 0, len(f.Items))
 	for _, item := range f.Items {
-		o, err := item.Odds()
+		l, err := item.Line()
 		if err != nil {
 			continue
 		}
-		odds = append(odds, o)
+		line := &picks.Line{
+			Spread:    l.Home.Spread,
+			OverUnder: l.Home.OverUnder,
+			Updated:   l.Updated,
+		}
+		lines = append(lines, line)
 	}
 	return
 }
 
-func (item *FeedItem) Odds() (o Odds, err error) {
+func (item *FeedItem) Line() (l Line, err error) {
 	matches := LineRegexp.FindStringSubmatch(item.Title)
 	if matches == nil {
 		err = ErrNoRegexpMatch
 		return
 	}
-	if o.Away, err = buildTeam(matches[1], matches[2], matches[3], matches[4]); err != nil {
+	if l.Away, err = newTeam(matches[1], matches[2], matches[3], matches[4]); err != nil {
 		return
 	}
-	if o.Home, err = buildTeam(matches[5], matches[6], matches[7], matches[8]); err != nil {
+	if l.Home, err = newTeam(matches[5], matches[6], matches[7], matches[8]); err != nil {
 		return
 	}
 	loc, err := time.LoadLocation("America/New_York")
-	if o.GameTime, err = time.ParseInLocation(DateLayout, matches[9], loc); err != nil {
+	if l.GameTime, err = time.ParseInLocation(DateLayout, matches[9], loc); err != nil {
+		return
+	}
+	if l.Updated, err = time.Parse(time.RFC1123Z, item.PubDate); err != nil {
 		return
 	}
 	return
 }
 
-func (o *Odds) 
-
-func buildTeam(name, spread, total, money string) (team TeamOdds, err error) {
+func newTeam(name, spread, total, money string) (team TeamLine, err error) {
 	if team.Name, err = translateName(name); err != nil {
 		return
 	}
 	if team.Spread, err = strconv.ParseFloat(spread, 64); err != nil {
 		return
 	}
-	if team.Total, err = strconv.ParseFloat(total, 64); err != nil {
+	if team.OverUnder, err = strconv.ParseFloat(total, 64); err != nil {
 		return
 	}
 	if team.Money, err = strconv.ParseFloat(money, 64); err != nil {
