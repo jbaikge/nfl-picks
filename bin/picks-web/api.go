@@ -1,11 +1,16 @@
 package main
 
 import (
-	"net/rpc"
+	"github.com/gorilla/rpc"
+	"log"
 )
 
 type Nil struct{}
 
+var rpcServer = rpc.NewServer()
+
 func RegisterAPI(api interface{}) {
-	rpc.Register(api)
+	if err := rpcServer.RegisterService(receiver, ""); err != nil {
+		log.Fatalf("rpcServer.RegisterService: %s", err)
+	}
 }

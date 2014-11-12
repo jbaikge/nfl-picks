@@ -1,11 +1,24 @@
 package main
 
+import (
+	"net/http"
+)
+
 type User struct{}
 
-func init(){
+type UserAuthIn struct {
+	Name  string
+	Phone string
+}
+
+type UserAuthOut struct {
+	Valid bool
+}
+
+func init() {
 	RegisterAPI(new(User))
 }
 
-func (u *User) Auth(in *Nil, out *Nil) (err error) {
+func (u *User) Auth(r *http.Request, in *UserAuthIn, out *UserAUthOut) (err error) {
 	return
 }
