@@ -26,7 +26,8 @@ func (us *UpdateScores) Do(s *picks.Store, args []string) (err error) {
 		return
 	}
 	for _, game := range games {
-		if q := picks.Quarter(game.Quarter); q == picks.Pregame || q == picks.Final || q == picks.FinalOvertime {
+		if q := picks.Quarter(game.Quarter); q == picks.Pregame {
+			fmt.Printf("Skipping %s during %s\n", game.Id, q)
 			continue
 		}
 		if err = s.SaveGame(us.convert(game, year, week)); err != nil {
@@ -34,22 +35,5 @@ func (us *UpdateScores) Do(s *picks.Store, args []string) (err error) {
 		}
 		fmt.Printf("Updated score %s %d %s %d\n", game.Away, game.AwayScore, game.Home, game.HomeScore)
 	}
-	return
-}
-
-func (us *UpdateScores) convert(in nfl.Game, year, week int) (out *picks.Game) {
-	out = &picks.Game{
-		Week:      week,
-		Year:      year,
-		Start:     in.Start(),
-		TimeLeft:  in.TimeLeft(),
-		Posession: in.Posession,
-		HomeId:    in.Home,
-		HomeScore: in.HomeScore,
-		AwayId:    in.Away,
-		AwayScore: in.AwayScore,
-		Quarter:   picks.Quarter(in.Quarter),
-	}
-	out.EventId, _ = strconv.ParseInt(in.EventId, 10, 64)
 	return
 }

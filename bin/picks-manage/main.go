@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-var dsn = flag.String("dsn", "postgres://svxnazhqdteqvj:kgaD6ehDzHcFoyEZ08V81yU-rw@ec2-54-197-237-120.compute-1.amazonaws.com:5432/d1546lf8imhfit", "Data Source Name")
+var dsn = flag.String("dsn", os.Getenv("DATABASE_URL"), "Data Source Name")
 
 func main() {
 	flag.Parse()
