@@ -2,26 +2,18 @@ package main
 
 import (
 	"fmt"
+	"github.com/jbaikge/nfl-picks/bin/picks-web/apitypes"
 	"github.com/jbaikge/nfl-picks/external/nfl"
 	"github.com/jbaikge/nfl-picks/picks"
 )
 
 type Game struct{}
 
-type GameImportIn struct {
-	Week int
-	Year int
-}
-
-type GameImportOut struct {
-	Games []*picks.Game
-}
-
 func init() {
 	RegisterAPI(new(Game))
 }
 
-func (api *Game) ImportWeek(in *GameImportIn, out *GameImportOut) (err error) {
+func (api *Game) ImportWeek(in *apitypes.GameImportIn, out *apitypes.GameImportOut) (err error) {
 	if out.Games, err = nfl.GamesFor(in.Year, in.Week); err != nil {
 		return
 	}
@@ -34,14 +26,14 @@ func (api *Game) ImportWeek(in *GameImportIn, out *GameImportOut) (err error) {
 	return
 }
 
-func (api *Game) ImportYear(in *GameImportIn, out *GameImportOut) (err error) {
+func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportOut) (err error) {
 	out.Games = make([]*picks.Game, 0, 300)
 	for week := 1; week <= 17; week++ {
-		req := &GameImportIn{
+		req := &apitypes.GameImportIn{
 			Week: week,
 			Year: in.Year,
 		}
-		resp := new(GameImportOut)
+		resp := new(apitypes.GameImportOut)
 		if err = api.ImportWeek(req, resp); err != nil {
 			return
 		}
