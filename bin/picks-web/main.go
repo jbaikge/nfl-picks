@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 var (
@@ -41,16 +40,7 @@ func main() {
 	}
 
 	// Routing
-	assetsHandler := http.FileServer(http.Dir(*AssetsDir))
-	Router.Handle("/images/", assetsHandler)
-	Router.Handle("/favicon.ico", assetsHandler)
-	Router.Handle("/css/", assetsHandler)
-	Router.Handle("/js/", assetsHandler)
-	Router.Handle("/templates/", assetsHandler)
-	Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join(*AssetsDir, "index.html"))
-	})
-
+	Router.PathPrefix("/").Handler(http.FileServer(http.Dir(*AssetsDir)))
 	http.Handle("/", handlers.CombinedLoggingHandler(os.Stdout, Router))
 
 	log.Fatal(http.ListenAndServe(":"+*Port, nil))
