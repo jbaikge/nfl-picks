@@ -34,3 +34,7 @@ func (q Quarter) String() string {
 	}
 	return "UNKOWN [" + string(q) + "]"
 }
+
+func (q Quarter) Value() string {
+	return string(q)
+}

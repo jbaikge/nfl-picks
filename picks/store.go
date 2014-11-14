@@ -54,7 +54,7 @@ func (s *Store) UpdateLine(line *Line) (err error) {
 			game_over_under   = $3,
 			game_line_updated = $4
 		WHERE
-			game_id            = $1
+			game_id           = $1
 	`
 	result, err := s.db.Exec(query, line.GameId.String(), line.Spread, line.OverUnder, line.Updated)
 	if err != nil {
@@ -82,7 +82,7 @@ func (s *Store) UpdateGame(g *Game) (err error) {
 		WHERE
 			game_id            = $1
 	`
-	_, err = s.db.Exec(query, g.Id.String(), g.AwayScore, g.HomeScore, g.Posession, g.Quarter, g.TimeLeft)
+	_, err = s.db.Exec(query, g.Id.String(), g.AwayScore, g.HomeScore, g.Posession, g.Quarter.Value(), g.TimeLeft)
 	return
 }
 
