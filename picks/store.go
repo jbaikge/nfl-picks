@@ -16,10 +16,7 @@ func NewStore(dataSourceName string) (s *Store, err error) {
 	s = &Store{
 		dsn: dataSourceName,
 	}
-	if s.db, err = sql.Open("postgres", dataSourceName); err != nil {
-		return
-	}
-	err = s.Setup()
+	s.db, err = sql.Open("postgres", dataSourceName)
 	return
 }
 
