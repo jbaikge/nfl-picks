@@ -11,3 +11,16 @@ angular.module("Picks.User.Pick", [
 		auth:        function(user) { return angular.isDefined(user) }
 	})
 }])
+
+// pick.service.js
+angular.module("Picks.User.Pick").service("PickService", ["jsonrpc", function(jsonrpc) {
+}])
+
+// pick.controller.js
+angular.module("Picks.User.Pick").controller("Picks.User.PickController", [
+	"$scope",
+	"PickService",
+	function($log, $scope, PickService) {
+	
+	}
+])
