@@ -51,6 +51,23 @@ type UserAuthOut struct {
 	Username string
 }
 
+type UserLastSeenIn struct {
+	Id int64
+}
+
+type UserUpdateIn struct {
+	Id          int64
+	NewUsername string
+	OldPIN      int
+	NewPIN      int
+}
+
+type UserUpdateOut struct {
+	Id       int64
+	IsAdmin  bool
+	Username string
+}
+
 type UserUsernamesOut struct {
 	Usernames []string
 }
