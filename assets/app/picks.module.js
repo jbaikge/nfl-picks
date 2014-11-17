@@ -5,7 +5,8 @@ angular.module("Picks", [
 	"ngRoute",
 	"jsonrpc",
 	"Picks.User.Login",
-	"Picks.User.Pick"
+	"Picks.User.Pick",
+	"Picks.User.Profile"
 ])
 
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
