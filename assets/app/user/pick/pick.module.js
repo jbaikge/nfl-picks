@@ -8,9 +8,6 @@ angular.module("Picks.User.Pick", [
 	$routeProvider.when("/user/pick", {
 		controller:  "Picks.User.PickController",
 		templateUrl: "/app/user/pick/pick.partial.html",
-		auth:        function(user) {
-			return angular.isDefined(user)
-		}
+		auth:        function(user) { return angular.isDefined(user) }
 	})
 }])
-
