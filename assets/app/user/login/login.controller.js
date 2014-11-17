@@ -1,12 +1,13 @@
 "use strict"
 
 angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
+	"$cookieStore",
+	"$location",
 	"$log",
-	"$scope",
 	"$rootScope",
+	"$scope",
 	"LoginService",
-	function($log, $scope, $rootScope, LoginService) {
-		$log.log("Hello from LoginController")
+	function($cookieStore, $location, $log, $rootScope, $scope, LoginService) {
 		$scope.Form = {}
 
 		$scope.Usernames = []
@@ -33,11 +34,14 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 
 			LoginService.auth($scope.Form.Username, $scope.Form.PIN)
 				.success(function(data, status) {
-					$rootScope.User = {
+					var user = {
 						Id:       data.result.Id,
 						IsAdmin:  data.result.IsAdmin,
 						Username: data.result.Username
 					}
+					$rootScope.User = user
+					$cookieStore.put("User", user)
+					$location.path("/user/pick")
 				}).error(function(data, status) {
 					$log.warn("error status: %s", status)
 					$log.warn("error data: ", data)
