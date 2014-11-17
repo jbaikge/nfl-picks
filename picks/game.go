@@ -13,6 +13,7 @@ type Game struct {
 	EventId   int64
 	Year      int
 	Week      int
+	Season    string
 	Start     time.Time
 	TimeLeft  time.Duration
 	Posession string

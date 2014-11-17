@@ -42,7 +42,7 @@ var (
 	LiveEndpoint = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"
 )
 
-func CurrentGames() (year, week int, games []*picks.Game, err error) {
+func CurrentGames() (week picks.Current, games []*picks.Game, err error) {
 	return getGames(LiveEndpoint)
 }
 
@@ -51,7 +51,7 @@ func GamesFor(year, week int) (games []*picks.Game, err error) {
 	if err != nil {
 		return
 	}
-	_, _, games, err = getGames(u.String())
+	_, games, err = getGames(u.String())
 	return
 }
 
@@ -92,7 +92,7 @@ func dataURL(seasonYear int, seasonType string, week int) (u *url.URL, err error
 	return
 }
 
-func getGames(url string) (year, week int, games []*picks.Game, err error) {
+func getGames(url string) (week picks.Current, games []*picks.Game, err error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return
@@ -105,16 +105,18 @@ func getGames(url string) (year, week int, games []*picks.Game, err error) {
 		return
 	}
 
-	week = ss.GameSet.Week
-	year = ss.GameSet.Year
+	week.Week = ss.GameSet.Week
+	week.Year = ss.GameSet.Year
+	week.Season = ss.GameSet.Season
 	nflGames := ss.GameSet.Games
 
 	games = make([]*picks.Game, len(nflGames))
 	for i, ng := range nflGames {
 		games[i] = &picks.Game{
 			Id:        picks.GameId(ng.Away, ng.Home, ng.Start()),
-			Year:      year,
-			Week:      week,
+			Year:      ss.GameSet.Year,
+			Week:      ss.GameSet.Week,
+			Season:    ss.GameSet.Season,
 			Start:     ng.Start(),
 			TimeLeft:  ng.TimeLeft(),
 			Posession: ng.Posession,

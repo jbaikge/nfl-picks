@@ -11,6 +11,14 @@ func (s *Store) Setup() (err error) {
 		Data  string
 	}{
 		{
+			`CREATE TABLE IF NOT EXISTS config (
+				year   INTEGER NOT NULL,
+				week   INTEGER NOT NULL,
+				season VARCHAR(8) NOT NULL
+			)`,
+			`INSERT INTO config VALUES (2014, 11, 'REG')`,
+		},
+		{
 			`CREATE TABLE IF NOT EXISTS stadiums (
 				stadium_id    VARCHAR(3) NOT NULL UNIQUE,
 				stadium_name  TEXT NOT NULL,
@@ -113,6 +121,7 @@ func (s *Store) Setup() (err error) {
 				game_posession     VARCHAR(3),
 				game_week          INTEGER NOT NULL DEFAULT 0,
 				game_year          INTEGER NOT NULL DEFAULT 0,
+				game_season        VARCHAR(8) NOT NULL DEFAULT 'REG',
 				game_spread        NUMERIC(5,2) NOT NULL DEFAULT 0.00,
 				game_over_under    NUMERIC(5,2) NOT NULL DEFAULT 0.00,
 				game_line_updated  TIMESTAMP WITH TIME ZONE

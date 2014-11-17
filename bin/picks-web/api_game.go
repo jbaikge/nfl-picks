@@ -13,6 +13,30 @@ func init() {
 	RegisterAPI(new(Game))
 }
 
+func (api *Game) CurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
+	out.Year, out.Week, out.Season, err = Store.CurrentWeek()
+	return
+}
+
+func (api *Game) CurrentGames(in *Nil, out *apitypes.GameCurrentGamesOut) (err error) {
+	out.Current, out.Games, err = nfl.CurrentGames()
+	return
+}
+
+func (api *Game) UpdateCurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
+	info, _, err := nfl.CurrentGames()
+	if err != nil {
+		return
+	}
+	if err = Store.UpdateCurrentWeek(info.Year, info.Week, info.Season); err != nil {
+		return
+	}
+	out.Season = info.Season
+	out.Week = info.Week
+	out.Year = info.Year
+	return
+}
+
 func (api *Game) ImportWeek(in *apitypes.GameImportIn, out *apitypes.GameImportOut) (err error) {
 	if out.Games, err = nfl.GamesFor(in.Year, in.Week); err != nil {
 		return
@@ -43,7 +67,7 @@ func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportO
 }
 
 func (api *Game) UpdateScores(in *Nil, out *apitypes.GameScoresOut) (err error) {
-	_, _, games, err := nfl.CurrentGames()
+	_, games, err := nfl.CurrentGames()
 	if err != nil {
 		return
 	}

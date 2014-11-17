@@ -23,13 +23,19 @@ func (s *Store) Close() error {
 	return s.db.Close()
 }
 
+func (s *Store) CurrentWeek() (year, week int, season string, err error) {
+	query := `SELECT year, week, season FROM config`
+	err = s.db.QueryRow(query).Scan(&year, &week, &season)
+	return
+}
+
 func (s *Store) NewGame(g *Game) (err error) {
-	insert := `INSERT INTO games
-		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year)
+	query := `INSERT INTO games
+		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year, game_season)
 		VALUES
-		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11      )
+		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11,       $12        )
 	`
-	_, err = s.db.Exec(insert, g.Id.String(), g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year)
+	_, err = s.db.Exec(query, g.Id.String(), g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year, g.Season)
 	return
 }
 
@@ -40,6 +46,16 @@ func (s *Store) Pick(userId int, p *Pick) (err error) {
 		(?,       ?,       ?         )
 	`
 	_, err = s.db.Exec(query, userId, p.GameId, p.Value)
+	return
+}
+
+func (s *Store) UpdateCurrentWeek(year, week int, season string) (err error) {
+	query := `UPDATE config SET
+		year   = $1,
+		week   = $2,
+		season = $3
+	`
+	_, err = s.db.Exec(query, year, week, season)
 	return
 }
 

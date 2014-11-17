@@ -4,9 +4,18 @@ import (
 	"github.com/jbaikge/nfl-picks/picks"
 )
 
+type GameCurrentGamesOut struct {
+	Current picks.Current
+	Games   []*picks.Game
+}
+
+type GameCurrentWeekOut struct {
+	picks.Current
+}
+
 type GameImportIn struct {
-	Week int
 	Year int
+	Week int
 }
 
 type GameImportOut struct {
