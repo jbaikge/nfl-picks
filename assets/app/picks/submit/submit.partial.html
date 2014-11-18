@@ -1,58 +1,75 @@
-<div class="col-md-12 rows-striped">
+<div class="col-md-12">
 	<h1>Submit Your Picks <small class="text-nowrap">Week {{ Current.Week }}</small></h1>
 	<p>Spreads are always on the home team. Picks are automatically saved when made.</p>
-	<div class="row" ng-repeat="Line in Lines">
-		<div role="group" data-toggle="buttons" aria-label="Pick options">
+	<p>My Picks: {{ Picks }}</p>
 
-			<div class="col-md-4">
-				<div class="row">
-					<div class="col-xs-4 text-right">
-						<label class="btn btn-default btn-block">
-							<input type="radio" name="{{ Line.Line.GameId }}" autocomplete="off" class="hide">
-							{{ Line.Away.City }}
-						</label>
-					</div>
-					<div class="col-xs-2">
-						<div class="btn-sized">@</div>
-					</div>
-					<div class="col-xs-4">
-						<label class="btn btn-default btn-block">
-							<input type="radio" name="{{ Line.Line.GameId }}" autocomplete="off" class="hide">
-							{{ Line.Home.City }}
-						</label>
-					</div>
-					<div class="col-xs-2">
-						<div class="btn-sized">{{ Line.Line.Spread | number:1}}</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-3">
-				<div class="row">
-					<div class="col-xs-4 col-md-5 text-right">
-						<label class="btn btn-default btn-block">
-							<input type="radio" name="{{ Line.Line.GameId }}" autocomplete="off" class="hide">
-							Over
-						</label>
-					</div>
-					<div class="col-xs-2 visible-xs-block visible-sm-block"></div>
-					<div class="col-xs-4 col-md-5">
-						<label class="btn btn-default btn-block">
-							<input type="radio" name="{{ Line.Line.GameId }}" autocomplete="off" class="hide">
-							Under
-						</label>
-					</div>
-					<div class="col-xs-2">
-						<div class="btn-sized">{{ Line.Line.OverUnder | number:1 }}</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-5">
-				<div>{{ Line.Start | date:'EEE, MMM d, h:mm a' }}</div>
-				<div class="text-muted">{{ Line.Stadium.Name }}, {{ Line.Stadium.City }}, {{ Line.Stadium.State }} - {{ Line.Stadium.Roof }}; {{ Line.Stadium.Turf }}</div>
-			</div>
-
+	<div class="row">
+		<div class="col-md-offset-3 col-md-6">
+			<p><button class="btn btn-large btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
 		</div>
 	</div>
+
+	<div class="rows-striped">
+		<div class="row" ng-repeat="Line in Lines track by Line.Line.GameId">
+			<div role="group" data-toggle="buttons" aria-label="Pick options">
+
+				<div class="col-md-4">
+					<div class="row">
+						<div class="col-xs-4">
+							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="Line.Away.Id">
+								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Away.Id" autocomplete="off" class="hide">
+								{{ Line.Away.City }}
+							</label>
+						</div>
+						<div class="col-xs-2">
+							<div class="btn-sized">@</div>
+						</div>
+						<div class="col-xs-4">
+							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="Line.Home.Id">
+								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Home.Id" autocomplete="off" class="hide">
+								{{ Line.Home.City }}
+							</label>
+						</div>
+						<div class="col-xs-2">
+							<div class="btn-sized">{{ Line.Line.Spread | number:1}}</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="row">
+						<div class="col-xs-4 col-md-5">
+							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="'OVER'">
+								<input type="radio" name="{{ Line.Line.GameId }}" value="OVR" autocomplete="off" class="hide">
+								Over
+							</label>
+						</div>
+						<div class="col-xs-2 visible-xs-block visible-sm-block"></div>
+						<div class="col-xs-4 col-md-5">
+							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="'UNDER'">
+								<input type="radio" name="{{ Line.Line.GameId }}" value="UND" autocomplete="off" class="hide">
+								Under
+							</label>
+						</div>
+						<div class="col-xs-2">
+							<div class="btn-sized">{{ Line.Line.OverUnder | number:1 }}</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-5">
+					<div>{{ Line.Start | date:'EEE, MMM d, h:mm a' }}</div>
+					<div class="text-muted">{{ Line.Stadium.Name }}, {{ Line.Stadium.City }}, {{ Line.Stadium.State }} - {{ Line.Stadium.Roof }}; {{ Line.Stadium.Turf }}</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-offset-3 col-md-6">
+			<p><button class="btn btn-large btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
+		</div>
+	</div>
+
 </div>

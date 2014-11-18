@@ -144,7 +144,8 @@ func (s *Store) Setup() (err error) {
 				user_id    SERIAL NOT NULL REFERENCES users (user_id),
 				game_id    TEXT NOT NULL REFERENCES games (game_id),
 				pick_value TEXT NOT NULL,
-				pick_added TIMESTAMP WITH TIME ZONE
+				pick_added TIMESTAMP WITH TIME ZONE,
+				UNIQUE(user_id, game_id)
 			)`,
 			``,
 		},

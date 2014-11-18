@@ -21,5 +21,10 @@ func (p *Picks) Submit(in *apitypes.PicksSubmitIn, out *apitypes.PicksSubmitOut)
 	if !out.Saved {
 		return
 	}
+	for _, pick := range in.Picks {
+		if err = Store.Pick(in.UserId, &pick); err != nil {
+			return
+		}
+	}
 	return
 }

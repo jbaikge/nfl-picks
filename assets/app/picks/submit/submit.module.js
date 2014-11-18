@@ -1,7 +1,8 @@
 "use strict"
 
 angular.module("Picks.Picks.Submit", [
-	"ngRoute"
+	"ngRoute",
+	"ui.bootstrap"
 ])
 
 .config(["$routeProvider", function($routeProvider) {
@@ -18,17 +19,43 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 		return jsonrpc("Lines.Current")
 	}
 
-	this.submit = function(id, value) {
-		return jsonrpc("Picks.Submit", {Id: id, Value: value})
+	this.submit = function(userId, picks) {
+		var p = {
+			UserId: userId,
+			Picks:  picks
+		}
+		return jsonrpc("Picks.Submit", p)
 	}
 }])
 
 // pick.controller.js
 angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", [
+	"$rootScope",
 	"$scope",
 	"SubmitService",
-	function($scope, SubmitService) {
+	function($rootScope, $scope, SubmitService) {
 		$scope.Lines = []
+		$scope.Picks = {
+			"BUFvMIA@20141113":"OVR"
+		}
+
+		$scope.submitPicks = function() {
+			var picks = []
+			var gameId
+			for (gameId in $scope.Picks) {
+				picks.push({
+					GameId: gameId,
+					Value:  $scope.Picks[gameId]
+				})
+			}
+			SubmitService.submit($rootScope.User.Id, picks)
+				.success(function(data, status) {
+					console.log("SubmitService", "data", data)
+				})
+				.error(function(data, status) {
+					console.log("SubmitService.submit", "status", status, "data", data)
+				})
+		}
 
 		SubmitService.currentLines()
 			.success(function(data, status) {
@@ -36,7 +63,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				$scope.Lines = data.result.Lines
 			})
 			.error(function(data, status) {
-				console.log("SubmitService", "status", status, "data", data)
+				console.log("SubmitService.currentLines", "status", status, "data", data)
 			})
 	}
 ])
