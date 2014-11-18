@@ -30,6 +30,11 @@ type LinesImportOut struct {
 	Lines []*picks.Line
 }
 
+type PicksLinesOut struct {
+	Current picks.Current
+	Lines   []*picks.PickLine
+}
+
 type PicksSubmitIn struct {
 	UserId int64
 	Picks  []picks.Pick

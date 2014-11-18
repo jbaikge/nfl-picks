@@ -10,6 +10,11 @@ func init() {
 	RegisterAPI(new(Picks))
 }
 
+func (p *Picks) Lines(in *Nil, out *apitypes.PicksLinesOut) (err error) {
+	// _, err = Store.CurrentLines()
+	return
+}
+
 func (p *Picks) Submit(in *apitypes.PicksSubmitIn, out *apitypes.PicksSubmitOut) (err error) {
 	out.Valid = make([]bool, len(in.Picks))
 	out.Saved = true
