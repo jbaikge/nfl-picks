@@ -1,5 +1,9 @@
 package picks
 
+import (
+	"time"
+)
+
 type Pick struct {
 	GameId GameIdType
 	Value  string
