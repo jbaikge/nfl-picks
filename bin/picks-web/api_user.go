@@ -29,6 +29,7 @@ func (api *User) Update(in *apitypes.UserUpdateIn, out *Nil) (err error) {
 	}
 	if !match {
 		err = fmt.Errorf("Incorrect PIN")
+		return
 	}
 	err = Store.UpdateUser(in.Id, in.NewUsername, in.NewPIN)
 	return
