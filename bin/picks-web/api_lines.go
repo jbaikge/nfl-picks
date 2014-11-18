@@ -14,7 +14,7 @@ func init() {
 }
 
 func (api *Lines) Current(in *Nil, out *apitypes.LinesCurrentOut) (err error) {
-
+	out.Current, out.Lines, err = Store.CurrentPickLines()
 	return
 }
 

@@ -23,7 +23,7 @@ func (s *Store) UserLastSeen(userId int64) (err error) {
 }
 
 func (s *Store) Usernames() (usernames []string, err error) {
-	query := `SELECT user_name FROM users`
+	query := `SELECT user_name FROM users ORDER BY user_name ASC`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return

@@ -10,10 +10,20 @@ type Pick struct {
 }
 
 type PickLine struct {
-	Line  Line
-	Start time.Time
-	Home  Team
-	Away  Team
+	Line    Line
+	Start   time.Time
+	Home    Team
+	Away    Team
+	Stadium Stadium
+}
+
+type Stadium struct {
+	Id    string
+	Name  string
+	City  string
+	State string
+	Turf  string
+	Roof  string
 }
 
 func (p Pick) Valid() bool {

@@ -14,7 +14,7 @@ func init() {
 }
 
 func (api *Game) CurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
-	out.Year, out.Week, out.Season, err = Store.CurrentWeek()
+	out.Current, err = Store.CurrentWeek()
 	return
 }
 

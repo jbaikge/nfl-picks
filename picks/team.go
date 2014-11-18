@@ -1,9 +1,11 @@
 package picks
 
 type Team struct {
-	Id   string
-	Name string
-	City string
+	Id       string
+	Name     string
+	City     string
+	League   string
+	Division string
 }
 
 type TeamScore struct {
