@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="/css/bootstrap.min.css"> -->
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
@@ -24,12 +24,49 @@
 	<!-- <script src="/app/vendor/jsonrpc/jsonrpc.module.js"></script> -->
 	<script src="/app/lib/jsonrpc.module.js"></script>
 	<script src="/app/user/login/login.module.js"></script>
-	<script src="/app/user/pick/pick.module.js"></script>
+	<script src="/app/picks/submit/submit.module.js"></script>
 	<script src="/app/user/profile/profile.module.js"></script>
 	<script src="/app/picks.module.js"></script>
+	<style type="text/css">
+	.glyphicon-spin {
+		-webkit-animation: spin 1000ms infinite linear;
+		animation: spin 1000ms infinite linear;
+	}
+	@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		}
+		100% {
+			-webkit-transform: rotate(359deg);
+			transform: rotate(359deg);
+		}
+	}
+	@keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		}
+		100% {
+			-webkit-transform: rotate(359deg);
+			transform: rotate(359deg);
+		}
+	}
+	body {
+		padding-top:70px;
+	}
+	.rows-striped>.row:nth-of-type(odd) {
+		background:#F9F9F9;
+	}
+	.rows-striped>.row {
+		padding-top:0.75em;
+		padding-bottom:0.75em;
+		border-top:1px solid #DDD;
+	}
+	</style>
 </head>
 <body>
-<nav class="navbar navbar-inverse" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#CollapsableNav">
@@ -44,11 +81,13 @@
 					- <span ng-class="{ 'text-warning': User.IsAdmin }">{{ User.Username }}</span>
 				</span>
 			</a>
+			<div class="navbar-text navbar-right">
+				<span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
+			</div>
 		</div>
-
 		<div class="collapse navbar-collapse" id="CollapsableNav">
 			<ul class="nav navbar-nav navbar-right" ng-if="User">
-				<li><a href="#/user/pick">Picks</a></li>
+				<li><a href="#/picks/submit">Picks</a></li>
 				<li><a href="#/standings">Standings</a></li>
 				<li><a href="#/user/profile">Profile</a></li>
 			</ul>

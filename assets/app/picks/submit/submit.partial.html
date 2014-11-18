@@ -1,14 +1,48 @@
-<div class="col-md-12">
-	<div class="row" ng-repeat="Game in Games">
+<div class="col-md-12 rows-striped">
+	<h1>Submit Your Picks <small class="text-nowrap">Week {{ Current.Week }}</small></h1>
+	<p>Spreads are always on the home team. Picks are automatically saved when made.</p>
+	<div class="row" ng-repeat="Line in Lines">
 		<div class="col-sm-8">
-			Denver Broncos @ Washington Redskins
+			<div class="row">
+				<div class="col-md-12">
+					<h2>
+						<span class="text-nowrap">{{ Line.Away.City }} {{ Line.Away.Name }}</span>
+						<span class="text-muted">@</span>
+						<span class="text-nowrap visible-xs-block visible-sm-block visible-md-inline visible-lg-inline">
+							{{ Line.Home.City }} {{ Line.Home.Name }}
+						</span>
+						<small class="text-nowrap visible-xs-block visible-sm-block visible-md-inline visible-lg-inline">
+							{{ Line.Line.Spread | number:1}};
+							O/U: {{ Line.Line.OverUnder }}
+						</small>
+					</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p class="text-muted">{{ Line.Stadium.Name }} at {{ Line.Stadium.City }}, {{ Line.Stadium.State }} - {{ Line.Stadium.Turf }} with {{ Line.Stadium.Roof }} roof</p>
+				</div>
+			</div>
 		</div>
 		<div class="col-sm-4">
-			<div class="btn-group btn-group-justified" role="group" aria-label="Pick options">
-				<a class="btn btn-primary">{{ Game.Away }}</a>
-				<a class="btn btn-success">{{ Game.Home }}</a>
-				<a class="btn btn-warning">Over</a>
-				<a class="btn btn-danger">Under</a>
+			<div class="hidden-xs" style="height:20px"></div>
+			<div class="btn-group btn-group-justified" role="group" data-toggle="buttons" aria-label="Pick options">
+				<label class="btn btn-default">
+					<input type="radio" name="{{ Line.Line.Id }}" autocomplete="off">
+					{{ Line.Away.Id }}
+				</label>
+				<label class="btn btn-default">
+					<input type="radio" name="{{ Line.Line.Id }}" autocomplete="off">
+					{{ Line.Home.Id }}
+				</label>
+				<label class="btn btn-default">
+					<input type="radio" name="{{ Line.Line.Id }}" autocomplete="off">
+					OVR
+				</label>
+				<label class="btn btn-default">
+					<input type="radio" name="{{ Line.Line.Id }}" autocomplete="off">
+					UND
+				</label>
 			</div>
 		</div>
 	</div>
