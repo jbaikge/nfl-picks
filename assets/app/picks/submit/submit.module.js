@@ -17,6 +17,10 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 	this.currentLines = function() {
 		return jsonrpc("Lines.Current")
 	}
+
+	this.submit = function(id, value) {
+		return jsonrpc("Picks.Submit", {Id: id, Value: value})
+	}
 }])
 
 // pick.controller.js

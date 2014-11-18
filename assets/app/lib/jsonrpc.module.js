@@ -9,8 +9,12 @@ angular.module("jsonrpc", [])
 		path = rpcPath
 	}
 
-	this.$get = [ "$http", function($http) {
+	this.$get = [ "$http", "$rootScope", function($http, $rootScope) {
+		$rootScope.RequestsActive = 0
+
 		function doRequest(method, data) {
+			console.log("doRequest %d", $rootScope.RequestsActive)
+			$rootScope.RequestsActive++
 			var id = method + " " + (new Date).toJSON()
 			var payload = {
 				jsonrpc: "2.0",
@@ -21,7 +25,12 @@ angular.module("jsonrpc", [])
 			if (angular.isDefined(data)) {
 				payload.params.push(data)
 			}
-			return $http.post(path, payload)
+			var apiCall = $http.post(path, payload)
+			apiCall.success(function() {
+				console.log("success %d", $rootScope.RequestsActive)
+				$rootScope.RequestsActive--
+			})
+			return apiCall
 		}
 		return doRequest
 	}]
