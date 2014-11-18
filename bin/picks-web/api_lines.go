@@ -13,6 +13,11 @@ func init() {
 	RegisterAPI(new(Lines))
 }
 
+func (api *Lines) Current(in *Nil, out *apitypes.LinesCurrentOut) (err error) {
+
+	return
+}
+
 func (api *Lines) ImportCurrent(in *Nil, out *apitypes.LinesImportOut) (err error) {
 	out.Lines, err = oddsmaker.CurrentLines()
 	if err != nil {

@@ -26,13 +26,13 @@ type GameScoresOut struct {
 	Updated []*picks.Game
 }
 
-type LinesImportOut struct {
-	Lines []*picks.Line
-}
-
-type PicksLinesOut struct {
+type LinesCurrentOut struct {
 	Current picks.Current
 	Lines   []*picks.PickLine
+}
+
+type LinesImportOut struct {
+	Lines []*picks.Line
 }
 
 type PicksSubmitIn struct {
