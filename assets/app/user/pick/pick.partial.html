@@ -1,11 +1,15 @@
 <div class="col-md-12">
-	<div class="row">
-		<div class="col-md-6">Denver Broncos @ Washington Redskins</div>
-		<div class="col-md-6">
-			<button class="btn btn-primary">Denver</button>
-			<button class="btn btn-primary">Redskins</button>
-			<button class="btn btn-primary">Over</button>
-			<button class="btn btn-primary">Under</button>
+	<div class="row" ng-repeat="Game in Games">
+		<div class="col-sm-8">
+			Denver Broncos @ Washington Redskins
+		</div>
+		<div class="col-sm-4">
+			<div class="btn-group btn-group-justified" role="group" aria-label="Pick options">
+				<a class="btn btn-primary">{{ Game.Away }}</a>
+				<a class="btn btn-success">{{ Game.Home }}</a>
+				<a class="btn btn-warning">Over</a>
+				<a class="btn btn-danger">Under</a>
+			</div>
 		</div>
 	</div>
 </div>

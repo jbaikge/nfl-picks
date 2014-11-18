@@ -14,13 +14,24 @@ angular.module("Picks.User.Pick", [
 
 // pick.service.js
 angular.module("Picks.User.Pick").service("PickService", ["jsonrpc", function(jsonrpc) {
+	this.currentGames = function() {
+		return jsonrpc("Game.CurrentGames")
+	}
 }])
 
 // pick.controller.js
 angular.module("Picks.User.Pick").controller("Picks.User.PickController", [
 	"$scope",
 	"PickService",
-	function($log, $scope, PickService) {
-	
+	function($scope, PickService) {
+		$scope.Games = []
+
+		PickService.currentGames()
+			.success(function(data, status) {
+				$scope.Games = data.result.Games
+			})
+			.error(function(data, status) {
+				console.log("PickService", "status", status, "data", data)
+			})
 	}
 ])
