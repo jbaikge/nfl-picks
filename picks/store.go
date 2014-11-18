@@ -143,6 +143,9 @@ func (s *Store) UserValidate(username string, pin int) (userId int64, isAdmin bo
 		LIMIT 1
 	`
 	err = s.db.QueryRow(query, username, fmt.Sprintf("%04d", pin)).Scan(&userId, &isAdmin)
+	if err == sql.ErrNoRows {
+		err = fmt.Errorf("Invalid credentials")
+	}
 	return
 }
 

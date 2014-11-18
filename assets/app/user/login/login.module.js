@@ -36,13 +36,14 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 	"$scope",
 	"LoginService",
 	function($cookieStore, $location, $log, $rootScope, $scope, LoginService) {
+		var defaultOption = "Select Your Name..."
+
 		$scope.Form = {}
 
 		$scope.Usernames = []
 		LoginService.usernames()
 			.success(function(data, status) {
 				$scope.Usernames = data.result.Usernames
-				var defaultOption = "Select Your Name..."
 				$scope.Usernames.unshift(defaultOption)
 				$scope.Form.Username = defaultOption
 			})
@@ -52,16 +53,25 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 			})
 
 		$scope.doLogin = function() {
-			if (!angular.isDefined($scope.Form.Username)) {
+			$scope.Alert = {}
+
+			if (!angular.isDefined($scope.Form.Username) || $scope.Form.Username == defaultOption) {
+				$scope.Alert.Danger = "Please select your name"
 				return
 			}
 
 			if (!angular.isDefined($scope.Form.PIN)) {
+				$scope.Alert.Danger = "Please provide your PIN"
 				return
 			}
 
 			LoginService.auth($scope.Form.Username, $scope.Form.PIN)
 				.success(function(data, status) {
+					if (data.error != null) {
+						$scope.Alert.Danger = data.error
+						return
+					}
+
 					var user = {
 						Id:       data.result.Id,
 						IsAdmin:  data.result.IsAdmin,
