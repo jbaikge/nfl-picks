@@ -22,14 +22,6 @@ type Game struct {
 	Away      string
 	AwayScore int
 	Quarter   Quarter
-	Line      Line
-}
-
-type Line struct {
-	GameId    GameIdType
-	Spread    float64
-	OverUnder float64
-	Updated   time.Time
 }
 
 func GameId(away, home string, date time.Time) (id GameIdType) {
