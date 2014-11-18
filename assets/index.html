@@ -29,7 +29,7 @@
 	<script src="/app/picks.module.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-inverted" role="navigation">
+<nav class="navbar navbar-inverse" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#CollapsableNav">
@@ -38,11 +38,16 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#/">NFL Pick'em - <span ng-class="{ 'text-warning': User.IsAdmin }">{{ User.Username }}</span></a>
+			<a class="navbar-brand" href="#/">
+				NFL Pick'em
+				<span ng-if="User">
+					- <span ng-class="{ 'text-warning': User.IsAdmin }">{{ User.Username }}</span>
+				</span>
+			</a>
 		</div>
 
 		<div class="collapse navbar-collapse" id="CollapsableNav">
-			<ul class="nav navbar-nav navbar-right">
+			<ul class="nav navbar-nav navbar-right" ng-if="User">
 				<li><a href="#/user/pick">Picks</a></li>
 				<li><a href="#/standings">Standings</a></li>
 				<li><a href="#/user/profile">Profile</a></li>

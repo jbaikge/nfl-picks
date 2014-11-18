@@ -42,7 +42,7 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 		LoginService.usernames()
 			.success(function(data, status) {
 				$scope.Usernames = data.result.Usernames
-				var defaultOption = "Chose your name"
+				var defaultOption = "Select Your Name..."
 				$scope.Usernames.unshift(defaultOption)
 				$scope.Form.Username = defaultOption
 			})
