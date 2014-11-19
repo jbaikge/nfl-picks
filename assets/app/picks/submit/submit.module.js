@@ -15,8 +15,8 @@ angular.module("Picks.Picks.Submit", [
 
 // pick.service.js
 angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", function(jsonrpc) {
-	this.currentLines = function() {
-		return jsonrpc("Lines.Current")
+	this.currentLines = function(userId) {
+		return jsonrpc("Lines.Current", {UserId: userId})
 	}
 
 	this.submit = function(userId, picks) {
@@ -35,9 +35,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 	"SubmitService",
 	function($rootScope, $scope, SubmitService) {
 		$scope.Lines = []
-		$scope.Picks = {
-			"BUFvMIA@20141113":"OVR"
-		}
+		$scope.Picks = {}
 
 		$scope.submitPicks = function() {
 			var picks = []
@@ -57,10 +55,17 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				})
 		}
 
-		SubmitService.currentLines()
+		SubmitService.currentLines($rootScope.User.Id)
 			.success(function(data, status) {
 				$scope.Current = data.result.Current
 				$scope.Lines = data.result.Lines
+				var picks = data.result.Picks
+				if (picks == null) {
+					return
+				}
+				for (var i = 0; i < picks.length; i++) {
+					$scope.Picks[picks[i].GameId] = picks[i].Value
+				}
 			})
 			.error(function(data, status) {
 				console.log("SubmitService.currentLines", "status", status, "data", data)

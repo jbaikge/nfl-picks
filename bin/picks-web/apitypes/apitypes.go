@@ -26,9 +26,14 @@ type GameScoresOut struct {
 	Updated []*picks.Game
 }
 
+type LinesCurrentIn struct {
+	UserId int64
+}
+
 type LinesCurrentOut struct {
 	Current picks.Current
 	Lines   []*picks.PickLine
+	Picks   []*picks.Pick
 }
 
 type LinesImportOut struct {

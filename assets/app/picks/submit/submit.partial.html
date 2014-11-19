@@ -1,11 +1,11 @@
 <div class="col-md-12">
 	<h1>Submit Your Picks <small class="text-nowrap">Week {{ Current.Week }}</small></h1>
-	<p>Spreads are always on the home team. Picks are automatically saved when made.</p>
-	<p>My Picks: {{ Picks }}</p>
+	<p>Spreads are always on the home team.</p>
 
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
-			<p><button class="btn btn-large btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
+			<p><button class="btn btn-lg btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
+			<p><progressbar value="60"></progressbar></p>
 		</div>
 	</div>
 
@@ -16,7 +16,11 @@
 				<div class="col-md-4">
 					<div class="row">
 						<div class="col-xs-4">
-							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="Line.Away.Id">
+							<label
+								class="btn btn-block"
+								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Away.Id, 'btn-success': Picks[Line.Line.GameId] == Line.Away.Id }"
+								ng-model="Picks[Line.Line.GameId]"
+								btn-radio="Line.Away.Id">
 								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Away.Id" autocomplete="off" class="hide">
 								{{ Line.Away.City }}
 							</label>
@@ -25,7 +29,11 @@
 							<div class="btn-sized">@</div>
 						</div>
 						<div class="col-xs-4">
-							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="Line.Home.Id">
+							<label
+								class="btn btn-block"
+								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Home.Id, 'btn-success': Picks[Line.Line.GameId] == Line.Home.Id }"
+								ng-model="Picks[Line.Line.GameId]"
+								btn-radio="Line.Home.Id">
 								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Home.Id" autocomplete="off" class="hide">
 								{{ Line.Home.City }}
 							</label>
@@ -39,14 +47,22 @@
 				<div class="col-md-3">
 					<div class="row">
 						<div class="col-xs-4 col-md-5">
-							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="'OVER'">
+							<label
+								class="btn btn-block"
+								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'OVER', 'btn-success': Picks[Line.Line.GameId] == 'OVER' }"
+								ng-model="Picks[Line.Line.GameId]"
+								btn-radio="'OVER'">
 								<input type="radio" name="{{ Line.Line.GameId }}" value="OVR" autocomplete="off" class="hide">
 								Over
 							</label>
 						</div>
 						<div class="col-xs-2 visible-xs-block visible-sm-block"></div>
 						<div class="col-xs-4 col-md-5">
-							<label class="btn btn-default btn-block" ng-model="Picks[Line.Line.GameId]" btn-radio="'UNDER'">
+							<label
+								class="btn btn-block"
+								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'UNDER', 'btn-success': Picks[Line.Line.GameId] == 'UNDER' }"
+								ng-model="Picks[Line.Line.GameId]"
+								btn-radio="'UNDER'">
 								<input type="radio" name="{{ Line.Line.GameId }}" value="UND" autocomplete="off" class="hide">
 								Under
 							</label>
@@ -68,7 +84,7 @@
 
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
-			<p><button class="btn btn-large btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
+			<p><button class="btn btn-lg btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
 		</div>
 	</div>
 
