@@ -4,15 +4,17 @@ angular.module("Picks", [
 	"ngCookies",
 	"ngRoute",
 	"jsonrpc",
+	"Picks.Picks.Viewall",
 	"Picks.Picks.Submit",
 	"Picks.User.Login",
-	"Picks.User.Profile"
+	"Picks.User.Profile",
+	"ui.bootstrap"
 ])
 
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 	$locationProvider.html5Mode(false)
 	$locationProvider.hashPrefix("")
-	$routeProvider.otherwise({ redirectTo: "/user/login" })
+	$routeProvider.otherwise({ redirectTo: "/picks/all" })
 }])
 
 .run(["$cookieStore", "$location", "$rootScope", function($cookieStore, $location, $rootScope) {

@@ -10,6 +10,18 @@ func init() {
 	RegisterAPI(new(Picks))
 }
 
+func (p *Picks) AllCurrent(in *Nil, out *apitypes.PicksAllOut) (err error) {
+	c, err := Store.CurrentWeek()
+	if err != nil {
+		return
+	}
+	out.Picks, err = Store.AllPicks(c)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (p *Picks) Submit(in *apitypes.PicksSubmitIn, out *apitypes.PicksSubmitOut) (err error) {
 	out.Valid = make([]bool, len(in.Picks))
 	out.Saved = true

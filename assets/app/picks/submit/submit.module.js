@@ -13,7 +13,7 @@ angular.module("Picks.Picks.Submit", [
 	})
 }])
 
-// pick.service.js
+// submit.service.js
 angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", function(jsonrpc) {
 	this.currentLines = function(userId) {
 		return jsonrpc("Lines.Current", {UserId: userId})
@@ -28,7 +28,7 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 	}
 }])
 
-// pick.controller.js
+// submit.controller.js
 angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", [
 	"$rootScope",
 	"$scope",

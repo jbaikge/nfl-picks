@@ -1,0 +1,30 @@
+<div class="col-md-12">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="text-right">Away</th>
+				<th class="text-center text-muted">@</th>
+				<th>Home</th>
+				<th>Spread</th>
+				<th>Over/Under</th>
+				<th>Game Time</th>
+				<th ng-repeat="User in Users">{{ User }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="Game in Games track by Game.Line.GameId">
+				<td class="text-right"><span class="text-nowrap">{{ Game.Away.City }} {{ Game.Away.Name }}</span></td>
+				<td class="text-center text-muted">@</td>
+				<td><span class="text-nowrap">{{ Game.Home.City }} {{ Game.Home.Name }}</span></td>
+				<td class="text-right"><span ng-if="Game.Line.Spread &gt;= 0">+</span>{{ Game.Line.Spread | number:1}}</td>
+				<td class="text-right">{{ Game.Line.OverUnder | number:1 }}</td>
+				<td><span class="text-nowrap">{{ Game.Start | date:'EEE, MMM d, h:mm a' }}</span></td>
+				<td
+					ng-repeat="User in Users"
+					class="text-center"
+					ng-class="{ success: Picks[Game.Line.GameId][User].Value == Game.Away.Id, info: Picks[Game.Line.GameId][User].Value == Game.Home.Id, warning: Picks[Game.Line.GameId][User].Value == 'OVER', danger: Picks[Game.Line.GameId][User].Value == 'UNDER' }"
+					>{{ Picks[Game.Line.GameId][User].Value }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
