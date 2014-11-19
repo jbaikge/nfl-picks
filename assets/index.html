@@ -67,7 +67,6 @@
 		font-size:14px;
 		padding-top:8px;
 		padding-bottom:8px;
-		text-align:center;
 		vertical-align:middle;
 	}
 	</style>
@@ -85,7 +84,7 @@
 			<a class="navbar-brand" href="#/">
 				NFL Pick'em
 				<span ng-if="User">
-					- <span ng-class="{ 'text-warning': User.IsAdmin }">{{ User.Username }}</span>
+					- {{ User.Username }}<span ng-if="User.IsAdmin">*</span>
 				</span>
 			</a>
 			<div class="navbar-text navbar-right">
