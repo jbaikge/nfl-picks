@@ -3,10 +3,12 @@
 		<thead>
 			<tr>
 				<th class="text-right">Away</th>
+				<th><span class="sr-only">Away Score</span></th>
 				<th class="text-center text-muted">@</th>
+				<th><span class="sr-only">Home Score</span></th>
 				<th>Home</th>
-				<th>Spread</th>
-				<th>Over/Under</th>
+				<th><span class="sr-only">Spread</span></th>
+				<th><span class="sr-only">Over/Under</span></th>
 				<th>Game Time</th>
 				<th ng-repeat="User in Users">{{ User }}</th>
 			</tr>
@@ -14,7 +16,9 @@
 		<tbody>
 			<tr ng-repeat="Game in Games track by Game.Line.GameId">
 				<td class="text-right"><span class="text-nowrap">{{ Game.Away.City }} {{ Game.Away.Name }}</span></td>
-				<td class="text-center text-muted">@</td>
+				<td class="text-center text-muted">
+					@
+				</td>
 				<td><span class="text-nowrap">{{ Game.Home.City }} {{ Game.Home.Name }}</span></td>
 				<td class="text-right"><span ng-if="Game.Line.Spread &gt;= 0">+</span>{{ Game.Line.Spread | number:1}}</td>
 				<td class="text-right">{{ Game.Line.OverUnder | number:1 }}</td>
