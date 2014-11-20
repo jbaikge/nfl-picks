@@ -14,7 +14,7 @@ angular.module("Picks", [
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 	$locationProvider.html5Mode(false)
 	$locationProvider.hashPrefix("")
-	$routeProvider.otherwise({ redirectTo: "/picks/all" })
+	$routeProvider.otherwise({ redirectTo: "/picks/viewall" })
 }])
 
 .run(["$cookieStore", "$location", "$rootScope", function($cookieStore, $location, $rootScope) {
