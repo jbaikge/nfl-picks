@@ -11,11 +11,11 @@ func init() {
 }
 
 func (p *Picks) AllCurrent(in *Nil, out *apitypes.PicksAllOut) (err error) {
-	c, err := Store.CurrentWeek()
+	out.Week, err = Store.CurrentWeek()
 	if err != nil {
 		return
 	}
-	out.Picks, err = Store.AllPicks(c)
+	out.Picks, err = Store.AllPicks(out.Week)
 	if err != nil {
 		return
 	}

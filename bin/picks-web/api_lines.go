@@ -14,12 +14,12 @@ func init() {
 }
 
 func (api *Lines) Current(in *apitypes.LinesCurrentIn, out *apitypes.LinesCurrentOut) (err error) {
-	out.Current, out.Lines, err = Store.CurrentPickLines()
+	out.Week, out.Lines, err = Store.CurrentPickLines()
 	if err != nil {
 		return
 	}
 	if in.UserId > 0 {
-		out.Picks, err = Store.UserPicks(in.UserId, out.Current)
+		out.Picks, err = Store.UserPicks(in.UserId, out.Week)
 	}
 	return
 }

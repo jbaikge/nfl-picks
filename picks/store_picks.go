@@ -1,6 +1,6 @@
 package picks
 
-func (s *Store) AllPicks(c Current) (picks map[GameIdType]map[string]Pick, err error) {
+func (s *Store) AllPicks(w Week) (picks map[GameIdType]map[string]Pick, err error) {
 	query := `SELECT
 			picks.game_id,
 			picks.pick_value,
@@ -14,7 +14,7 @@ func (s *Store) AllPicks(c Current) (picks map[GameIdType]map[string]Pick, err e
 			AND games.game_year = $2
 	`
 
-	rows, err := s.db.Query(query, c.Week, c.Year)
+	rows, err := s.db.Query(query, w.Week, w.Year)
 	if err != nil {
 		return
 	}
@@ -58,7 +58,7 @@ func (s *Store) Pick(userId int64, p *Pick) (err error) {
 	return
 }
 
-func (s *Store) UserPicks(userId int64, c Current) (picks []*Pick, err error) {
+func (s *Store) UserPicks(userId int64, w Week) (picks []*Pick, err error) {
 	query := `SELECT
 			game_id,
 			pick_value
@@ -70,7 +70,7 @@ func (s *Store) UserPicks(userId int64, c Current) (picks []*Pick, err error) {
 			AND games.game_week = $2
 			AND games.game_year = $3
 	`
-	rows, err := s.db.Query(query, userId, c.Week, c.Year)
+	rows, err := s.db.Query(query, userId, w.Week, w.Year)
 	if err != nil {
 		return
 	}

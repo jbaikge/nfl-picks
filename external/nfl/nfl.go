@@ -42,7 +42,7 @@ var (
 	LiveEndpoint = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"
 )
 
-func CurrentGames() (week picks.Current, games []*picks.Game, err error) {
+func CurrentGames() (week picks.Week, games []*picks.Game, err error) {
 	return getGames(LiveEndpoint)
 }
 
@@ -92,7 +92,7 @@ func dataURL(seasonYear int, seasonType string, week int) (u *url.URL, err error
 	return
 }
 
-func getGames(url string) (week picks.Current, games []*picks.Game, err error) {
+func getGames(url string) (week picks.Week, games []*picks.Game, err error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return

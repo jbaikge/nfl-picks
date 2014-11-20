@@ -14,26 +14,24 @@ func init() {
 }
 
 func (api *Game) CurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
-	out.Current, err = Store.CurrentWeek()
+	out.Week, err = Store.CurrentWeek()
 	return
 }
 
 func (api *Game) CurrentGames(in *Nil, out *apitypes.GameCurrentGamesOut) (err error) {
-	out.Current, out.Games, err = nfl.CurrentGames()
+	out.Week, out.Games, err = nfl.CurrentGames()
 	return
 }
 
 func (api *Game) UpdateCurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
-	info, _, err := nfl.CurrentGames()
+	w, _, err := nfl.CurrentGames()
 	if err != nil {
 		return
 	}
-	if err = Store.UpdateCurrentWeek(info.Year, info.Week, info.Season); err != nil {
+	if err = Store.UpdateCurrentWeek(w.Year, w.Week, w.Season); err != nil {
 		return
 	}
-	out.Season = info.Season
-	out.Week = info.Week
-	out.Year = info.Year
+	out.Week = w
 	return
 }
 

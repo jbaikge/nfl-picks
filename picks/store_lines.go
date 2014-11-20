@@ -5,8 +5,8 @@ import (
 )
 
 // Couple human-friendly extras in PickLine over regular Line
-func (s *Store) CurrentPickLines() (c Current, lines []*PickLine, err error) {
-	if c, err = s.CurrentWeek(); err != nil {
+func (s *Store) CurrentPickLines() (w Week, lines []*PickLine, err error) {
+	if w, err = s.CurrentWeek(); err != nil {
 		return
 	}
 	query := `SELECT
@@ -40,7 +40,7 @@ func (s *Store) CurrentPickLines() (c Current, lines []*PickLine, err error) {
 			AND game_year = $2
 		ORDER BY game_start ASC, team_id_home ASC
 	`
-	rows, err := s.db.Query(query, c.Week, c.Year)
+	rows, err := s.db.Query(query, w.Week, w.Year)
 	if err != nil {
 		return
 	}

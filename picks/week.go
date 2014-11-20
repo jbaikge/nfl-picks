@@ -1,6 +1,6 @@
 package picks
 
-type Current struct {
+type Week struct {
 	Week   int
 	Year   int
 	Season string

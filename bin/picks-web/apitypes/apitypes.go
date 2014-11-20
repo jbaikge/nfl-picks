@@ -5,12 +5,12 @@ import (
 )
 
 type GameCurrentGamesOut struct {
-	Current picks.Current
-	Games   []*picks.Game
+	Week  picks.Week
+	Games []*picks.Game
 }
 
 type GameCurrentWeekOut struct {
-	picks.Current
+	picks.Week
 }
 
 type GameImportIn struct {
@@ -31,9 +31,9 @@ type LinesCurrentIn struct {
 }
 
 type LinesCurrentOut struct {
-	Current picks.Current
-	Lines   []*picks.PickLine
-	Picks   []*picks.Pick
+	Week  picks.Week
+	Lines []*picks.PickLine
+	Picks []*picks.Pick
 }
 
 type LinesImportOut struct {
@@ -41,8 +41,8 @@ type LinesImportOut struct {
 }
 
 type PicksAllOut struct {
-	Current picks.Current
-	Picks   map[picks.GameIdType]map[string]picks.Pick
+	Week  picks.Week
+	Picks map[picks.GameIdType]map[string]picks.Pick
 }
 
 type PicksSubmitIn struct {

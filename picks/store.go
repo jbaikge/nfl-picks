@@ -22,9 +22,9 @@ func (s *Store) Close() error {
 	return s.db.Close()
 }
 
-func (s *Store) CurrentWeek() (c Current, err error) {
+func (s *Store) CurrentWeek() (w Week, err error) {
 	query := `SELECT year, week, season FROM config`
-	err = s.db.QueryRow(query).Scan(&c.Year, &c.Week, &c.Season)
+	err = s.db.QueryRow(query).Scan(&w.Year, &w.Week, &w.Season)
 	return
 }
 
