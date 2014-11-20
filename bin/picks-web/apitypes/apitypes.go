@@ -23,6 +23,10 @@ type GameImportOut struct {
 }
 
 type GameScoresOut struct {
+	Scores []*picks.Game
+}
+
+type GameUpdateScoresOut struct {
 	Updated []*picks.Game
 }
 

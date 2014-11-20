@@ -9,6 +9,11 @@ func (s *Store) CurrentPickLines() (w Week, lines []*PickLine, err error) {
 	if w, err = s.CurrentWeek(); err != nil {
 		return
 	}
+	lines, err = s.PickLines(w)
+	return
+}
+
+func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 	query := `SELECT
 			game_start,
 			game_id,

@@ -1,5 +1,10 @@
 package picks
 
+import (
+	"database/sql"
+	"time"
+)
+
 func (s *Store) NewGame(g *Game) (err error) {
 	query := `INSERT INTO games
 		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year, game_season)
@@ -7,6 +12,51 @@ func (s *Store) NewGame(g *Game) (err error) {
 		($1,      $2,           $3,         $4,           $5,           $6,              $7,              $8,         $9,           $10,       $11,       $12        )
 	`
 	_, err = s.db.Exec(query, g.Id.String(), g.EventId, g.Home, g.Home, g.Away, g.HomeScore, g.AwayScore, g.Start, string(g.Quarter), g.Week, g.Year, g.Season)
+	return
+}
+
+func (s *Store) Scores(w Week) (games []*Game, err error) {
+	query := `SELECT
+			game_id,
+			game_start,
+			game_score_away,
+			game_score_home,
+			game_quarter,
+			game_timeleft,
+			game_posession
+		FROM games
+			LEFT JOIN stadiums USING(stadium_id)
+		WHERE
+			game_week     = $1
+			AND game_year = $2
+		ORDER BY game_start ASC, team_id_home ASC
+	`
+	rows, err := s.db.Query(query, w.Week, w.Year)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	games = make([]*Game, 0, 16)
+	for rows.Next() {
+		var gameId, quarter string
+		var timeleft, posession sql.NullString
+		g := new(Game)
+		err = rows.Scan(
+			&gameId,
+			&g.Start,
+			&g.AwayScore,
+			&g.HomeScore,
+			&quarter,
+			&timeleft,
+			&posession,
+		)
+		g.Id = GameIdType(gameId)
+		g.Quarter = Quarter(quarter)
+		g.TimeLeft, _ = time.ParseDuration(timeleft.String)
+		g.Posession = posession.String
+		games = append(games, g)
+	}
 	return
 }
 

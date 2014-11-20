@@ -18,11 +18,6 @@ func (api *Game) CurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err err
 	return
 }
 
-func (api *Game) CurrentGames(in *Nil, out *apitypes.GameCurrentGamesOut) (err error) {
-	out.Week, out.Games, err = nfl.CurrentGames()
-	return
-}
-
 func (api *Game) UpdateCurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
 	w, _, err := nfl.CurrentGames()
 	if err != nil {
@@ -64,7 +59,12 @@ func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportO
 	return
 }
 
-func (api *Game) UpdateScores(in *Nil, out *apitypes.GameScoresOut) (err error) {
+func (api *Game) Scores(in *picks.Week, out *apitypes.GameScoresOut) (err error) {
+	out.Scores, err = Store.Scores(*in)
+	return
+}
+
+func (api *Game) UpdateScores(in *Nil, out *apitypes.GameUpdateScoresOut) (err error) {
 	_, games, err := nfl.CurrentGames()
 	if err != nil {
 		return

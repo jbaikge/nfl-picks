@@ -25,6 +25,10 @@ angular.module("Picks.Picks.Viewall").service("ViewallService", ["jsonrpc", func
 	this.users = function() {
 		return jsonrpc("User.Usernames")
 	}
+
+	this.scores = function(year, week) {
+		return jsonrpc("Game.Scores", { Year: year, Week: week })
+	}
 }])
 
 // viewall.controller.js
@@ -33,23 +37,31 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 	"$scope",
 	"ViewallService",
 	function($rootScope, $scope, ViewallService) {
-		$scope.Users = []
-		$scope.Games = []
-		$scope.Picks = {}
+		$scope.Week   = {}
+		$scope.Users  = []
+		$scope.Games  = []
+		$scope.Picks  = {}
+		$scope.Scores = []
 
 		ViewallService.users()
-			.success(function(data, status) {
-				$scope.Users = data.result.Usernames
+			.then(function(response) {
+				$scope.Users = response.data.result.Usernames
 			})
 
 		ViewallService.lines()
-			.success(function(data, status) {
-				$scope.Games = data.result.Lines
+			.then(function(response) {
+				$scope.Week = response.data.result.Week
+				$scope.Games = response.data.result.Lines
+				return ViewallService.scores($scope.Week.Year, $scope.Week.Week)
+			})
+			.then(function(response) {
+				$scope.Scores = response.data.result.Scores
+				console.log($scope.Scores)
 			})
 
 		ViewallService.picks()
-			.success(function(data, status) {
-				$scope.Picks = data.result.Picks
+			.then(function(response) {
+				$scope.Picks = response.data.result.Picks
 			})
 	}
 ])
