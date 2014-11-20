@@ -22,6 +22,6 @@ func (s *Store) UpdateGame(g *Game) (err error) {
 		WHERE
 			game_id            = $1
 	`
-	_, err = s.db.Exec(query, g.Id.String(), g.AwayScore, g.HomeScore, g.Posession, g.Quarter.Value(), g.TimeLeft)
+	_, err = s.db.Exec(query, g.Id.String(), g.AwayScore, g.HomeScore, g.Posession, g.Quarter.Value(), g.TimeLeft.String())
 	return
 }
