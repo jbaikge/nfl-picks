@@ -140,11 +140,24 @@ func (s *Store) Setup() (err error) {
 		},
 		{
 			`CREATE TABLE IF NOT EXISTS picks (
-				pick_id    SERIAL PRIMARY KEY,
-				user_id    SERIAL NOT NULL REFERENCES users (user_id),
-				game_id    TEXT NOT NULL REFERENCES games (game_id),
-				pick_value TEXT NOT NULL,
-				pick_added TIMESTAMP WITH TIME ZONE,
+				pick_id      SERIAL PRIMARY KEY,
+				user_id      SERIAL NOT NULL REFERENCES users (user_id),
+				game_id      TEXT NOT NULL REFERENCES games (game_id),
+				pick_value   TEXT NOT NULL,
+				pick_added   TIMESTAMP WITH TIME ZONE,
+				pick_updated TIMESTAMP WITH TIME ZONE,
+				UNIQUE(user_id, game_id)
+			)`,
+			``,
+		},
+		{
+			`CREATE TABLE IF NOT EXISTS tie_breaker (
+				tie_id      SERIAL PRIMARY KEY,
+				user_id     SERIAL NOT NULL REFERENCES users (user_id),
+				game_id     TEXT NOT NULL REFERENCES games (game_id),
+				tie_value   NUMERIC(5,2) NOT NULL DEFAULT 0.00,
+				tie_added   TIMESTAMP WITH TIME ZONE,
+				tie_updated TIMESTAMP WITH TIME ZONE,
 				UNIQUE(user_id, game_id)
 			)`,
 			``,
