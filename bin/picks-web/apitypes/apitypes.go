@@ -2,6 +2,7 @@ package apitypes
 
 import (
 	"github.com/jbaikge/nfl-picks/picks"
+	"time"
 )
 
 type GameCurrentGamesOut struct {
@@ -23,7 +24,8 @@ type GameImportOut struct {
 }
 
 type GameScoresOut struct {
-	Scores []*picks.Game
+	NextUpdate time.Duration
+	Scores     []*picks.Game
 }
 
 type GameUpdateScoresOut struct {

@@ -15,19 +15,31 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="Game in Games track by Game.Line.GameId">
-				<td class="text-right"><span class="text-nowrap">{{ Game.Away.City }} {{ Game.Away.Name }}</span></td>
-				<td class="text-center text-muted">
-					@
+				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Away.Id }">
+					<span class="text-nowrap">{{ Game.Away.City }} {{ Game.Away.Name }}</span>
 				</td>
-				<td><span class="text-nowrap">{{ Game.Home.City }} {{ Game.Home.Name }}</span></td>
-				<td class="text-right"><span ng-if="Game.Line.Spread &gt;= 0">+</span>{{ Game.Line.Spread | number:1}}</td>
+				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Away.Id }">
+					{{ Scores[Game.Line.GameId].AwayScore }}
+				</td>
+				<td class="text-center text-muted">
+					{{ Scores[Game.Line.GameId].Quarter | quarter }}
+					<span ng-show="Scores[Game.Line.GameId].TimeLeft &gt; 0">{{ Scores[Game.Line.GameId].TimeLeft / 1e6 | date:"mm:ss" }}</span>
+				</td>
+				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Home.Id }">
+					{{ Scores[Game.Line.GameId].HomeScore }}
+				</td>
+				<td ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Home.Id }">
+					<span class="text-nowrap">{{ Game.Home.City }} {{ Game.Home.Name }}</span>
+				</td>
+				<td class="text-right">
+					<span ng-if="Game.Line.Spread &gt;= 0">+</span>{{ Game.Line.Spread | number:1}}</td>
 				<td class="text-right">{{ Game.Line.OverUnder | number:1 }}</td>
 				<td><span class="text-nowrap">{{ Game.Start | date:'EEE, MMM d, h:mm a' }}</span></td>
-				<td
-					ng-repeat="User in Users"
-					class="text-center"
-					ng-class="{ success: Picks[Game.Line.GameId][User].Value == Game.Away.Id, info: Picks[Game.Line.GameId][User].Value == Game.Home.Id, warning: Picks[Game.Line.GameId][User].Value == 'OVER', danger: Picks[Game.Line.GameId][User].Value == 'UNDER' }"
-					>{{ Picks[Game.Line.GameId][User].Value }}</td>
+				<td ng-repeat="User in Users" class="text-center">
+					<span ng-class="{ 'text-success': Picks[Game.Line.GameId][User].Value == Game.Away.Id, 'text-info': Picks[Game.Line.GameId][User].Value == Game.Home.Id, 'text-warning': Picks[Game.Line.GameId][User].Value == 'OVER', 'text-danger': Picks[Game.Line.GameId][User].Value == 'UNDER' }">
+						{{ Picks[Game.Line.GameId][User].Value }}
+					</span>
+				</td>
 			</tr>
 		</tbody>
 	</table>

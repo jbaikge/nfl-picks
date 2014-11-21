@@ -41,7 +41,7 @@ func main() {
 
 	// Routing
 	Router.PathPrefix("/").Handler(http.FileServer(http.Dir(*AssetsDir)))
-	http.Handle("/", handlers.CombinedLoggingHandler(os.Stdout, Router))
+	http.Handle("/", handlers.LoggingHandler(os.Stdout, Router))
 
 	log.Fatal(http.ListenAndServe(":"+*Port, nil))
 }

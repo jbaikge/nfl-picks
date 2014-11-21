@@ -4,6 +4,7 @@ angular.module("Picks", [
 	"ngCookies",
 	"ngRoute",
 	"jsonrpc",
+	"quarter",
 	"Picks.Picks.Viewall",
 	"Picks.Picks.Submit",
 	"Picks.User.Login",

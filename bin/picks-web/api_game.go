@@ -5,6 +5,7 @@ import (
 	"github.com/jbaikge/nfl-picks/bin/picks-web/apitypes"
 	"github.com/jbaikge/nfl-picks/external/nfl"
 	"github.com/jbaikge/nfl-picks/picks"
+	"time"
 )
 
 type Game struct{}
@@ -61,6 +62,25 @@ func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportO
 
 func (api *Game) Scores(in *picks.Week, out *apitypes.GameScoresOut) (err error) {
 	out.Scores, err = Store.Scores(*in)
+	if err != nil {
+		return
+	}
+	out.NextUpdate = time.Hour
+	for _, s := range out.Scores {
+		// Skip completed games
+		if s.Quarter == picks.Final || s.Quarter == picks.FinalOvertime {
+			continue
+		}
+		// Game hasn't started yet
+		if s.Quarter == picks.Pregame {
+			if diff := s.Start.Sub(time.Now()); diff < out.NextUpdate {
+				out.NextUpdate = diff
+			}
+			continue
+		}
+		// Game is in progress
+		out.NextUpdate = time.Minute
+	}
 	return
 }
 

@@ -35,33 +35,50 @@ angular.module("Picks.Picks.Viewall").service("ViewallService", ["jsonrpc", func
 angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController", [
 	"$rootScope",
 	"$scope",
+	"$timeout",
 	"ViewallService",
-	function($rootScope, $scope, ViewallService) {
+	function($rootScope, $scope, $timeout, ViewallService) {
 		$scope.Week   = {}
 		$scope.Users  = []
 		$scope.Games  = []
 		$scope.Picks  = {}
-		$scope.Scores = []
+		$scope.Scores = {}
+
+		var updateScores = function(delay) {
+			console.log("updateScores %d", delay)
+			var doUpdate = function() {
+				ViewallService.scores($scope.Week.Year, $scope.Week.Week)
+					.success(function(data) {
+						var scores = data.result.Scores
+						for (var i = 0; i < scores.length; i++) {
+							$scope.Scores[scores[i].Id] = scores[i]
+						}
+						var nextUpdate = data.result.NextUpdate / 1e6
+						// Failsafe in case something goes wrong with the API
+						if (isNaN(nextUpdate) || nextUpdate == 0) {
+							nextUpdate = 60*1000
+						}
+						updateScores(nextUpdate)
+					})
+			}
+			return $timeout(doUpdate, delay)
+		}
 
 		ViewallService.users()
-			.then(function(response) {
-				$scope.Users = response.data.result.Usernames
+			.success(function(data) {
+				$scope.Users = data.result.Usernames
 			})
 
 		ViewallService.lines()
-			.then(function(response) {
-				$scope.Week = response.data.result.Week
-				$scope.Games = response.data.result.Lines
-				return ViewallService.scores($scope.Week.Year, $scope.Week.Week)
-			})
-			.then(function(response) {
-				$scope.Scores = response.data.result.Scores
-				console.log($scope.Scores)
+			.success(function(data) {
+				$scope.Week = data.result.Week
+				$scope.Games = data.result.Lines
+				updateScores(0)
 			})
 
 		ViewallService.picks()
-			.then(function(response) {
-				$scope.Picks = response.data.result.Picks
+			.success(function(data) {
+				$scope.Picks = data.result.Picks
 			})
 	}
 ])

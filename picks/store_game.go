@@ -53,7 +53,12 @@ func (s *Store) Scores(w Week) (games []*Game, err error) {
 		)
 		g.Id = GameIdType(gameId)
 		g.Quarter = Quarter(quarter)
-		g.TimeLeft, _ = time.ParseDuration(timeleft.String)
+		// Convert the Postgres representation of an "interval" into a Go
+		// time.Duration
+		if timeleft.Valid {
+			t, _ := time.Parse("15:04:05", timeleft.String)
+			g.TimeLeft = time.Duration(t.AddDate(1970, 0, 0).UnixNano())
+		}
 		g.Posession = posession.String
 		games = append(games, g)
 	}
