@@ -99,7 +99,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 
 		SubmitService.currentLines($rootScope.User.Id)
 			.success(function(data, status) {
-				$scope.Current = data.result.Current
+				$scope.Week = data.result.Week
 				$scope.Lines = data.result.Lines
 				var picks = data.result.Picks
 				if (picks == null) {
