@@ -35,7 +35,7 @@
 					<span ng-if="Game.Line.Spread &gt;= 0">+</span>{{ Game.Line.Spread | number:1}}</td>
 				<td class="text-right">{{ Game.Line.OverUnder | number:1 }}</td>
 				<td><span class="text-nowrap">{{ Game.Start | date:'EEE, MMM d, h:mm a' }}</span></td>
-				<td ng-repeat="User in Users" class="text-center">
+				<td ng-repeat="User in Users" class="">
 					<span ng-class="{ 'text-success': Picks[Game.Line.GameId][User].Value == Game.Away.Id, 'text-info': Picks[Game.Line.GameId][User].Value == Game.Home.Id, 'text-warning': Picks[Game.Line.GameId][User].Value == 'OVER', 'text-danger': Picks[Game.Line.GameId][User].Value == 'UNDER' }">
 						{{ Picks[Game.Line.GameId][User].Value }}
 					</span>
