@@ -1,4 +1,5 @@
 <div class="col-md-12">
+	<h1>Week {{ Week.Week }}</h1>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -37,7 +38,9 @@
 				<td><span class="text-nowrap">{{ Game.Start | date:'EEE, MMM d, h:mm a' }}</span></td>
 				<td ng-repeat="User in Users" class="">
 					<span ng-class="{ 'text-success': Picks[Game.Line.GameId][User].Value == Game.Away.Id, 'text-info': Picks[Game.Line.GameId][User].Value == Game.Home.Id, 'text-warning': Picks[Game.Line.GameId][User].Value == 'OVER', 'text-danger': Picks[Game.Line.GameId][User].Value == 'UNDER' }">
-						{{ Picks[Game.Line.GameId][User].Value }}
+						<span ng-class="{ 'text-muted': !Picks[Game.Line.GameId][User].Correct }">
+							{{ Picks[Game.Line.GameId][User].Value }}
+						</span>
 					</span>
 				</td>
 			</tr>

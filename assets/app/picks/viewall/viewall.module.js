@@ -56,6 +56,11 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 						var nextUpdate = data.result.NextUpdate / 1e6
 						updateScores(nextUpdate)
 					})
+
+				ViewallService.picks()
+					.success(function(data) {
+						$scope.Picks = data.result.Picks
+					})
 			}
 			return $timeout(doUpdate, delay)
 		}
@@ -70,11 +75,6 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 				$scope.Week = data.result.Week
 				$scope.Games = data.result.Lines
 				updateScores(0)
-			})
-
-		ViewallService.picks()
-			.success(function(data) {
-				$scope.Picks = data.result.Picks
 			})
 	}
 ])

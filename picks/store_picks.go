@@ -4,7 +4,22 @@ func (s *Store) AllPicks(w Week) (picks map[GameIdType]map[string]Pick, err erro
 	query := `SELECT
 			picks.game_id,
 			picks.pick_value,
-			users.user_name
+			users.user_name,
+			(
+				picks.pick_value = games.team_id_away
+				AND games.game_score_away - games.game_spread >= games.game_score_home
+			) OR (
+				picks.pick_value = games.team_id_away
+				AND games.game_score_home + games.game_spread >= games.game_score_away
+			) OR (
+				picks.pick_value = 'UNDER'
+				AND games.game_score_away + games.game_score_home <= games.game_over_under
+			) OR (
+				picks.pick_value = 'OVER'
+				AND games.game_score_away + games.game_score_home >= games.game_over_under
+			) OR (
+				games.game_quarter = 'P'
+			) AS correct
 		FROM
 			picks
 			LEFT JOIN games USING(game_id)
@@ -25,7 +40,7 @@ func (s *Store) AllPicks(w Week) (picks map[GameIdType]map[string]Pick, err erro
 	picks = make(map[GameIdType]map[string]Pick)
 	for rows.Next() {
 		var p Pick
-		if err = rows.Scan(&gameId, &p.Value, &userName); err != nil {
+		if err = rows.Scan(&gameId, &p.Value, &userName, &p.Correct); err != nil {
 			return
 		}
 		p.GameId = GameIdType(gameId)
@@ -88,3 +103,50 @@ func (s *Store) UserPicks(userId int64, w Week) (picks []*Pick, err error) {
 	}
 	return
 }
+
+// SELECT game_id, game_spread AS s, game_over_under AS ou,
+// team_id_away AS a,
+// game_score_away AS as,
+// game_score_away - game_spread AS ad,
+// game_score_away - game_spread >= game_score_home AS awin,
+// team_id_home AS h,
+// game_score_home AS hs,
+// game_score_home + game_spread AS hd,
+// game_score_home + game_spread >= game_score_away AS hwin,
+// game_score_away + game_score_home >= game_over_under AS over,
+// game_score_away + game_score_home <= game_over_under AS under
+// FROM games WHERE game_week = 1 AND game_year = 2014;
+// func (s *Store) WinningPicks(w Week) (picks []GamePick, err error) {
+// 	query := `SELECT
+// 			game_id,
+// 			team_id_away,
+// 			game_score_away - game_spread >= game_score_home,
+// 			team_id_home,
+// 			game_score_home + game_spread >= game_score_away,
+// 			game_score_away + game_score_home >= game_over_under,
+// 			game_score_away + game_score_home <= game_over_under
+// 		FROM
+// 			games
+// 		WHERE
+// 			games.game_week     = $1
+// 			AND games.game_year = $2
+// 	`
+// 	rows, err := s.db.Query(query, w.Week, w.Year)
+// 	if err != nil {
+// 		return
+// 	}
+
+// 	var gameId, awayId, homeId string
+// 	var away, home, over, under bool
+// 	picks = make([]GamePick, 0, 16)
+// 	for rows.Next() {
+// 		var p GamePick
+// 		err = rows.Scan(&gameId, &p.AwayId, &p.Away, &p.HomeId, &p.Home, &p.Over, &p.Under)
+// 		if err != nil {
+// 			return
+// 		}
+// 		p.GameId = GameIdType(gameId)
+// 		picks = append(picks, p)
+// 	}
+// 	return
+// }

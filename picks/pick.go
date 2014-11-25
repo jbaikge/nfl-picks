@@ -5,8 +5,9 @@ import (
 )
 
 type Pick struct {
-	GameId GameIdType
-	Value  string
+	GameId  GameIdType
+	Value   string
+	Correct bool
 }
 
 type PickLine struct {
