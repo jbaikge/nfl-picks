@@ -54,10 +54,6 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 							$scope.Scores[scores[i].Id] = scores[i]
 						}
 						var nextUpdate = data.result.NextUpdate / 1e6
-						// Failsafe in case something goes wrong with the API
-						if (isNaN(nextUpdate) || nextUpdate == 0) {
-							nextUpdate = 60*1000
-						}
 						updateScores(nextUpdate)
 					})
 			}
