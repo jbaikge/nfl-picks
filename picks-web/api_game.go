@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jbaikge/nfl-picks/external/nfl"
 	"github.com/jbaikge/nfl-picks/picks"
-	"github.com/jbaikge/nfl-picks/picks-web/apitypes"
 	"time"
 )
 
@@ -14,12 +13,20 @@ func init() {
 	RegisterAPI(new(Game))
 }
 
-func (api *Game) CurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
+// Current Week
+
+type CurrentWeekOut struct {
+	picks.Week
+}
+
+func (api *Game) CurrentWeek(in *Nil, out *CurrentWeekOut) (err error) {
 	out.Week, err = Store.CurrentWeek()
 	return
 }
 
-func (api *Game) UpdateCurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (err error) {
+// Update Current Week
+
+func (api *Game) UpdateCurrentWeek(in *Nil, out *CurrentWeekOut) (err error) {
 	w, _, err := nfl.CurrentGames()
 	if err != nil {
 		return
@@ -31,7 +38,18 @@ func (api *Game) UpdateCurrentWeek(in *Nil, out *apitypes.GameCurrentWeekOut) (e
 	return
 }
 
-func (api *Game) ImportWeek(in *apitypes.GameImportIn, out *apitypes.GameImportOut) (err error) {
+// Import Week
+
+type ImportIn struct {
+	Year int
+	Week int // Optional for ImportYear
+}
+
+type ImportOut struct {
+	Games []*picks.Game
+}
+
+func (api *Game) ImportWeek(in *ImportIn, out *ImportOut) (err error) {
 	if out.Games, err = nfl.GamesFor(in.Year, in.Week); err != nil {
 		return
 	}
@@ -44,14 +62,16 @@ func (api *Game) ImportWeek(in *apitypes.GameImportIn, out *apitypes.GameImportO
 	return
 }
 
-func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportOut) (err error) {
+// Import Year
+
+func (api *Game) ImportYear(in *ImportIn, out *ImportOut) (err error) {
 	out.Games = make([]*picks.Game, 0, 300)
 	for week := 1; week <= 17; week++ {
-		req := &apitypes.GameImportIn{
+		req := &ImportIn{
 			Week: week,
 			Year: in.Year,
 		}
-		resp := new(apitypes.GameImportOut)
+		resp := new(ImportOut)
 		if err = api.ImportWeek(req, resp); err != nil {
 			return
 		}
@@ -60,7 +80,14 @@ func (api *Game) ImportYear(in *apitypes.GameImportIn, out *apitypes.GameImportO
 	return
 }
 
-func (api *Game) Scores(in *picks.Week, out *apitypes.GameScoresOut) (err error) {
+// Scores
+
+type ScoresOut struct {
+	NextUpdate time.Duration
+	Scores     []*picks.Game
+}
+
+func (api *Game) Scores(in *picks.Week, out *ScoresOut) (err error) {
 	out.Scores, err = Store.Scores(*in)
 	if err != nil {
 		return
@@ -84,7 +111,13 @@ func (api *Game) Scores(in *picks.Week, out *apitypes.GameScoresOut) (err error)
 	return
 }
 
-func (api *Game) UpdateScores(in *Nil, out *apitypes.GameUpdateScoresOut) (err error) {
+// Update Scores
+
+type UpdateScoresOut struct {
+	Updated []*picks.Game
+}
+
+func (api *Game) UpdateScores(in *Nil, out *UpdateScoresOut) (err error) {
 	_, games, err := nfl.CurrentGames()
 	if err != nil {
 		return
