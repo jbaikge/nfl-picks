@@ -2,7 +2,7 @@
 	"ImportPath": "github.com/jbaikge/nfl-picks",
 	"GoVersion": "go1.3.3",
 	"Packages": [
-		"./bin/picks-web/"
+		"./picks-web"
 	],
 	"Deps": [
 		{
