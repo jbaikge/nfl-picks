@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/jbaikge/nfl-picks/bin/picks-web/apitypes"
 	"github.com/jbaikge/nfl-picks/external/nfl"
 	"github.com/jbaikge/nfl-picks/picks"
+	"github.com/jbaikge/nfl-picks/picks-web/apitypes"
 	"time"
 )
 

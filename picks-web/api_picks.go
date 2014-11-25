@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jbaikge/nfl-picks/bin/picks-web/apitypes"
+	"github.com/jbaikge/nfl-picks/picks-web/apitypes"
 )
 
 type Picks struct{}
