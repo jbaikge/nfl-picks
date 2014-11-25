@@ -1,0 +1,29 @@
+{
+	"ImportPath": "github.com/jbaikge/nfl-picks",
+	"GoVersion": "go1.3.3",
+	"Packages": [
+		"./bin/picks-web/"
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "14f550f51af52180c2eefed15e5fd18d63c0a64a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/handlers",
+			"Rev": "629c263a9cb2f334507b30e4937a595763cc8142"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "14cafe28513321476c73967a5a4f3454b6129c46"
+		},
+		{
+			"ImportPath": "github.com/gorilla/rpc",
+			"Rev": "f50c84620999c65ac5c204e52f1c1a9299548ca6"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Rev": "6d16a400975d186dbbf6334350fca31721b6efe5"
+		}
+	]
+}
