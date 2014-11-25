@@ -75,9 +75,11 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 					var user = {
 						Id:       data.result.Id,
 						IsAdmin:  data.result.IsAdmin,
-						Username: data.result.Username
+						Username: data.result.Username,
+						Theme:    data.result.Theme
 					}
 					$rootScope.User = user
+					$rootScope.Theme = user.Theme
 					$cookieStore.put("User", user)
 					$location.path("/user/pick")
 				}).error(function(data, status) {

@@ -5,15 +5,16 @@ import (
 	"fmt"
 )
 
-func (s *Store) UpdateUser(id int64, username string, pin int) (err error) {
+func (s *Store) UpdateUser(id int64, username string, pin int, theme string) (err error) {
 	query := `UPDATE users
 		SET
-			user_name = $2,
-			user_pin  = $3
+			user_name  = $2,
+			user_pin   = $3,
+			user_theme = $4
 		WHERE
 			user_id   = $1
 	`
-	_, err = s.db.Exec(query, id, username, pin)
+	_, err = s.db.Exec(query, id, username, pin, theme)
 	return
 }
 
@@ -41,15 +42,15 @@ func (s *Store) Usernames() (usernames []string, err error) {
 	return
 }
 
-func (s *Store) UserValidate(username string, pin int) (userId int64, isAdmin bool, err error) {
-	query := `SELECT user_id, user_admin
+func (s *Store) UserValidate(username string, pin int) (userId int64, isAdmin bool, theme string, err error) {
+	query := `SELECT user_id, user_admin, user_theme
 		FROM users
 		WHERE
-			user_name = $1
+			user_name    = $1
 			AND user_pin = $2
 		LIMIT 1
 	`
-	err = s.db.QueryRow(query, username, fmt.Sprintf("%04d", pin)).Scan(&userId, &isAdmin)
+	err = s.db.QueryRow(query, username, fmt.Sprintf("%04d", pin)).Scan(&userId, &isAdmin, &theme)
 	if err == sql.ErrNoRows {
 		err = fmt.Errorf("Invalid credentials")
 	}

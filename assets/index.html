@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="{{ Theme }}">
+	<link rel="stylesheet" ng-href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/{{ Theme || 'flatly' }}/bootstrap.min.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
@@ -54,7 +54,7 @@
 		padding-top:70px;
 	}
 	.rows-striped>.row:nth-of-type(odd) {
-		background:#F9F9F9;
+		background:#{{ (Theme == '' || Theme == 'flatly') && 'F9F9F9' || '191919' }};
 	}
 	.rows-striped>.row {
 		padding-top:0.75em;
@@ -90,11 +90,12 @@
 			</div>
 		</div>
 		<div class="collapse navbar-collapse" id="CollapsableNav">
-			<ul class="nav navbar-nav navbar-right" ng-if="User">
-				<li><a href="#/picks/submit">Submit Picks</a></li>
-				<li><a href="#/picks/viewall">View Picks</a></li>
-				<li><a href="#/standings">Standings</a></li>
-				<li><a href="#/user/profile">Profile</a></li>
+			<ul class="nav navbar-nav navbar-right">
+				<li ng-if="User"><a href="#/picks/submit">Submit Picks</a></li>
+				<li ng-if="User"><a href="#/picks/viewall">View Picks</a></li>
+				<li ng-if="User"><a href="#/standings">Standings</a></li>
+				<li ng-if="User"><a href="#/user/profile">Profile</a></li>
+				<li ng-if="!User"><a href="#/user/login">Login</a></li>
 			</ul>
 		</div>
 	</div>

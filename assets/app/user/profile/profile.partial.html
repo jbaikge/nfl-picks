@@ -21,6 +21,13 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="Theme" class="col-sm-3 control-label">Theme</label>
+			<div class="col-sm-9">
+				<label class="radio-inline"><input type="radio" ng-model="Form.Theme" value="flatly"> Light</label>
+				<label class="radio-inline"><input type="radio" ng-model="Form.Theme" value="darkly"> Dark</label>
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-9">
 				<button type="submit" class="btn btn-primary" ng-click="doUpdate()">Update Profile</button>
 			</div>

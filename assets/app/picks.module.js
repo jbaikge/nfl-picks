@@ -29,6 +29,9 @@ angular.module("Picks", [
 			if (auth && !auth(user)) {
 				$location.path("/")
 			}
+			if (angular.isDefined(user)) {
+				$rootScope.Theme = user.Theme
+			}
 		}
 	})
 }])

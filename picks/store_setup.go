@@ -134,6 +134,7 @@ func (s *Store) Setup() (err error) {
 				user_name      TEXT NOT NULL,
 				user_pin       CHAR(4) NOT NULL DEFAULT '0000',
 				user_admin     BOOLEAN NOT NULL DEFAULT FALSE,
+				user_theme     VARCHAR(8) NOT NULL DEFAULT 'flatly',
 				user_last_seen TIMESTAMP WITH TIME ZONE
 			)`,
 			``,
