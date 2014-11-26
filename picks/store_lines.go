@@ -2,6 +2,7 @@ package picks
 
 import (
 	"fmt"
+	"github.com/lib/pq"
 )
 
 // Couple human-friendly extras in PickLine over regular Line
@@ -54,13 +55,14 @@ func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 	lines = make([]*PickLine, 0, 16)
 	for rows.Next() {
 		var game_id string
+		var updated pq.NullTime
 		l := new(PickLine)
 		err = rows.Scan(
 			&l.Start,
 			&game_id,
 			&l.Line.Spread,
 			&l.Line.OverUnder,
-			&l.Line.Updated,
+			&updated,
 			&l.Home.Id,
 			&l.Home.City,
 			&l.Home.Name,
@@ -79,6 +81,9 @@ func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 			&l.Stadium.Roof,
 		)
 		l.Line.GameId = GameIdType(game_id)
+		if updated.Valid {
+			l.Line.Updated = updated.Time
+		}
 		lines = append(lines, l)
 	}
 	return
