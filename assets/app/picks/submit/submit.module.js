@@ -44,15 +44,19 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 
 // submit.controller.js
 angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", [
+	"$log",
 	"$rootScope",
 	"$scope",
 	"SubmitService",
-	function($rootScope, $scope, SubmitService) {
+	function($log, $rootScope, $scope, SubmitService) {
 		$scope.Week       = {}
 		$scope.Lines      = []
 		$scope.Picks      = {}
 		$scope.Progress   = {}
 		$scope.TieBreaker = ""
+
+		var now = new Date
+		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
 			var o = { Home: 0, Away: 0, Over: 0, Under: 0 }
@@ -78,7 +82,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			if (total > 100) {
 				o.Under -= total - 100
 			}
-			console.log("counts:", o, "changed:", changed)
+			$log.log("counts:", o, "changed:", changed)
 
 			if (newValue.initial) {
 				delete($scope.Picks.initial)
@@ -87,10 +91,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 
 			SubmitService.submit($rootScope.User.Id, changed)
 				.success(function(data, status) {
-					console.log("SubmitService", "data", data)
+					$log.log("SubmitService", "data", data)
 				})
 				.error(function(data, status) {
-					console.log("SubmitService.submit", "status", status, "data", data)
+					$log.log("SubmitService.submit", "status", status, "data", data)
 				})
 			$scope.Progress = o
 		}, true)
@@ -102,10 +106,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 
 			SubmitService.tiebreaker($rootScope.User.Id, $scope.Week.Week, $scope.Week.Year, newValue)
 				.success(function(data, status) {
-					console.log("SubmitService.tiebreaker", "data", data)
+					$log.log("SubmitService.tiebreaker", "data", data)
 				})
 				.error(function(data, status) {
-					console.log("SubmitService.tiebreaker", "data", data)
+					$log.log("SubmitService.tiebreaker", "data", data)
 				})
 		}, true)
 
@@ -120,10 +124,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			}
 			SubmitService.submit($rootScope.User.Id, picks)
 				.success(function(data, status) {
-					console.log("SubmitService", "data", data)
+					$log.log("SubmitService", "data", data)
 				})
 				.error(function(data, status) {
-					console.log("SubmitService.submit", "status", status, "data", data)
+					$log.log("SubmitService.submit", "status", status, "data", data)
 				})
 		}
 
@@ -146,7 +150,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				$scope.Picks = myPicks
 			})
 			.error(function(data, status) {
-				console.log("SubmitService.currentLines", "status", status, "data", data)
+				$log.log("SubmitService.currentLines", "status", status, "data", data)
 			})
 	}
 ])

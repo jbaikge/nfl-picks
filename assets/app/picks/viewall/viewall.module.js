@@ -33,11 +33,12 @@ angular.module("Picks.Picks.Viewall").service("ViewallService", ["jsonrpc", func
 
 // viewall.controller.js
 angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController", [
+	"$log",
 	"$rootScope",
 	"$scope",
 	"$timeout",
 	"ViewallService",
-	function($rootScope, $scope, $timeout, ViewallService) {
+	function($log, $rootScope, $scope, $timeout, ViewallService) {
 		$scope.Week   = {}
 		$scope.Users  = []
 		$scope.Games  = []
@@ -45,7 +46,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 		$scope.Scores = {}
 
 		var updateScores = function(delay) {
-			console.log("updateScores %d", delay)
+			$log.log("updateScores %d", delay)
 			var doUpdate = function() {
 				ViewallService.scores($scope.Week.Year, $scope.Week.Week)
 					.success(function(data) {
@@ -56,6 +57,11 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 						var nextUpdate = data.result.NextUpdate / 1e6
 						updateScores(nextUpdate)
 					})
+
+				if (new Date($scope.Games[0].Start) > new Date) {
+					$log.log("Skipping:", new Date($scope.Games[0].Start), ">", new Date)
+					return
+				}
 
 				ViewallService.picks()
 					.success(function(data) {
