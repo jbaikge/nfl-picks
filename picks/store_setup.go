@@ -152,13 +152,12 @@ func (s *Store) Setup() (err error) {
 			``,
 		},
 		{
-			`CREATE TABLE IF NOT EXISTS tie_breaker (
+			`CREATE TABLE IF NOT EXISTS tie_breakers (
 				tie_id      SERIAL PRIMARY KEY,
 				user_id     SERIAL NOT NULL REFERENCES users (user_id),
 				game_id     TEXT NOT NULL REFERENCES games (game_id),
-				tie_value   NUMERIC(5,2) NOT NULL DEFAULT 0.00,
+				tie_value   VARCHAR(8) NOT NULL,
 				tie_added   TIMESTAMP WITH TIME ZONE,
-				tie_updated TIMESTAMP WITH TIME ZONE,
 				UNIQUE(user_id, game_id)
 			)`,
 			``,

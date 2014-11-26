@@ -43,17 +43,17 @@ func (p *Picks) AllCurrent(in *Nil, out *AllOut) (err error) {
 
 // Submit
 
-type SubmitIn struct {
+type SubmitPickIn struct {
 	UserId int64
 	Picks  []picks.Pick
 }
 
-type SubmitOut struct {
+type SubmitPickOut struct {
 	Valid []bool
 	Saved bool
 }
 
-func (p *Picks) Submit(in *SubmitIn, out *SubmitOut) (err error) {
+func (p *Picks) Submit(in *SubmitPickIn, out *SubmitPickOut) (err error) {
 	out.Valid = make([]bool, len(in.Picks))
 	out.Saved = true
 	for i, pick := range in.Picks {
@@ -65,7 +65,7 @@ func (p *Picks) Submit(in *SubmitIn, out *SubmitOut) (err error) {
 		return
 	}
 	for _, pick := range in.Picks {
-		if err = Store.Pick(in.UserId, &pick); err != nil {
+		if err = Store.AddPick(in.UserId, &pick); err != nil {
 			return
 		}
 	}

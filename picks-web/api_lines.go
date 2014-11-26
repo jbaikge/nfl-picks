@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/jbaikge/nfl-picks/external/oddsmaker"
 	"github.com/jbaikge/nfl-picks/picks"
 )
@@ -47,7 +46,6 @@ func (api *Lines) ImportCurrent(in *Nil, out *ImportLinesOut) (err error) {
 		return
 	}
 	for _, line := range out.Lines {
-		fmt.Printf("api.Lines.ImportCurrent: %16s %5.1f %5.1f\n", line.GameId, line.Spread, line.OverUnder)
 		if err = Store.UpdateLine(line); err != nil {
 			return
 		}
@@ -58,7 +56,6 @@ func (api *Lines) ImportCurrent(in *Nil, out *ImportLinesOut) (err error) {
 // Backfill
 
 func (api *Lines) Backfill(in *picks.Line, out *picks.Line) (err error) {
-	fmt.Printf("api.Lines.Backfill: %16s %5.1f %5.1f\n", in.GameId, in.Spread, in.OverUnder)
 	if err = Store.UpdateLine(in); err != nil {
 		return
 	}
