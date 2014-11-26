@@ -28,7 +28,7 @@
 									ng-model="Picks[Line.Line.GameId]"
 									btn-radio="Line.Away.Id">
 									<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Away.Id" autocomplete="off" class="hide">
-									{{ Line.Away.City }}
+									{{ Line.Away.Name }}
 								</label>
 							</p>
 						</div>
@@ -41,7 +41,7 @@
 									ng-model="Picks[Line.Line.GameId]"
 									btn-radio="Line.Home.Id">
 									<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Home.Id" autocomplete="off" class="hide">
-									@{{ Line.Home.City }}
+									@{{ Line.Home.Name }}
 								</label>
 							</p>
 						</div>
