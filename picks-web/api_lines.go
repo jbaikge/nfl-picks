@@ -18,9 +18,10 @@ type CurrentIn struct {
 }
 
 type CurrentOut struct {
-	Week  picks.Week
-	Lines []*picks.PickLine
-	Picks []*picks.Pick
+	Week       picks.Week
+	Lines      []*picks.PickLine
+	Picks      []*picks.Pick
+	TieBreaker picks.TieBreaker
 }
 
 func (api *Lines) Current(in *CurrentIn, out *CurrentOut) (err error) {
@@ -29,7 +30,12 @@ func (api *Lines) Current(in *CurrentIn, out *CurrentOut) (err error) {
 		return
 	}
 	if in.UserId > 0 {
-		out.Picks, err = Store.UserPicks(in.UserId, out.Week)
+		if out.Picks, err = Store.UserPicks(in.UserId, out.Week); err != nil {
+			return
+		}
+		if out.TieBreaker, err = Store.UserTieBreaker(in.UserId, out.Week); err != nil {
+			return
+		}
 	}
 	return
 }

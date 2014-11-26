@@ -1,6 +1,6 @@
 <div class="col-md-12">
 	<h1>Submit Your Picks <small class="text-nowrap">Week {{ Week.Week }}</small></h1>
-	<p>Spreads are always against the <span class="text-success">home team</span>. Picks are automatically submitted.</p>
+	<p>Spreads are always against the <span class="text-success">home team</span>. Picks are automatically submitted. Picks may take place from Wednesday at 5pm before the week's games, up to noon the next Thursday</p>
 
 	<div class="row">
 		<div class="col-md-12">
@@ -20,24 +20,30 @@
 				<div class="col-md-4">
 					<div class="row">
 						<div class="col-xs-5">
-							<label
-								class="btn btn-block"
-								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Away.Id, 'btn-primary': Picks[Line.Line.GameId] == Line.Away.Id }"
-								ng-model="Picks[Line.Line.GameId]"
-								btn-radio="Line.Away.Id">
-								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Away.Id" autocomplete="off" class="hide">
-								{{ Line.Away.City }}
-							</label>
+							<p>
+								<label
+									class="btn btn-block"
+									ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Away.Id, 'btn-primary': Picks[Line.Line.GameId] == Line.Away.Id }"
+									ng-disabled="Closed"
+									ng-model="Picks[Line.Line.GameId]"
+									btn-radio="Line.Away.Id">
+									<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Away.Id" autocomplete="off" class="hide">
+									{{ Line.Away.City }}
+								</label>
+							</p>
 						</div>
 						<div class="col-xs-5">
-							<label
-								class="btn btn-block"
-								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Home.Id, 'btn-success': Picks[Line.Line.GameId] == Line.Home.Id }"
-								ng-model="Picks[Line.Line.GameId]"
-								btn-radio="Line.Home.Id">
-								<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Home.Id" autocomplete="off" class="hide">
-								@{{ Line.Home.City }}
-							</label>
+							<p>
+								<label
+									class="btn btn-block"
+									ng-class="{ 'btn-default': Picks[Line.Line.GameId] != Line.Home.Id, 'btn-success': Picks[Line.Line.GameId] == Line.Home.Id }"
+									ng-disabled="Closed"
+									ng-model="Picks[Line.Line.GameId]"
+									btn-radio="Line.Home.Id">
+									<input type="radio" name="{{ Line.Line.GameId }}" ng-value="Line.Home.Id" autocomplete="off" class="hide">
+									@{{ Line.Home.City }}
+								</label>
+							</p>
 						</div>
 						<div class="col-xs-2">
 							<div class="btn-sized text-right"><span ng-if="Line.Line.Spread &gt;= 0">+</span>{{ Line.Line.Spread | number:1}}</div>
@@ -48,24 +54,30 @@
 				<div class="col-md-3">
 					<div class="row">
 						<div class="col-xs-5">
-							<label
-								class="btn btn-block"
-								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'OVER', 'btn-warning': Picks[Line.Line.GameId] == 'OVER' }"
-								ng-model="Picks[Line.Line.GameId]"
-								btn-radio="'OVER'">
-								<input type="radio" name="{{ Line.Line.GameId }}" value="OVR" autocomplete="off" class="hide">
-								Over
-							</label>
+							<p>
+								<label
+									class="btn btn-block"
+									ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'OVER', 'btn-warning': Picks[Line.Line.GameId] == 'OVER' }"
+									ng-disabled="Closed"
+									ng-model="Picks[Line.Line.GameId]"
+									btn-radio="'OVER'">
+									<input type="radio" name="{{ Line.Line.GameId }}" value="OVR" autocomplete="off" class="hide">
+									Over
+								</label>
+							</p>
 						</div>
 						<div class="col-xs-5">
-							<label
-								class="btn btn-block"
-								ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'UNDER', 'btn-danger': Picks[Line.Line.GameId] == 'UNDER' }"
-								ng-model="Picks[Line.Line.GameId]"
-								btn-radio="'UNDER'">
-								<input type="radio" name="{{ Line.Line.GameId }}" value="UND" autocomplete="off" class="hide">
-								Under
-							</label>
+							<p>
+								<label
+									class="btn btn-block"
+									ng-class="{ 'btn-default': Picks[Line.Line.GameId] != 'UNDER', 'btn-danger': Picks[Line.Line.GameId] == 'UNDER' }"
+									ng-disabled="Closed"
+									ng-model="Picks[Line.Line.GameId]"
+									btn-radio="'UNDER'">
+									<input type="radio" name="{{ Line.Line.GameId }}" value="UND" autocomplete="off" class="hide">
+									Under
+								</label>
+							</p>
 						</div>
 						<div class="col-xs-2">
 							<div class="btn-sized text-right">{{ Line.Line.OverUnder | number:1 }}</div>
@@ -74,20 +86,98 @@
 				</div>
 
 				<div class="col-md-5">
-					<div>{{ Line.Start | date:'EEE, MMM d, h:mm a' }}</div>
-					<div class="text-muted">{{ Line.Stadium.Name }}, {{ Line.Stadium.City }}, {{ Line.Stadium.State }} - {{ Line.Stadium.Roof }}; {{ Line.Stadium.Turf }}</div>
+					<p>{{ Line.Start | date:'EEE, MMM d, h:mm a' }}</p>
+					<p class="text-muted">{{ Line.Stadium.Name }}, {{ Line.Stadium.City }}, {{ Line.Stadium.State }} - {{ Line.Stadium.Roof }}; {{ Line.Stadium.Turf }}</p>
 				</div>
 
 			</div>
 		</div>
-	</div>
 
-	<!-- Removed in favor of auto-submit
-	<div class="row">
-		<div class="col-md-offset-3 col-md-6">
-			<p><button class="btn btn-lg btn-block btn-primary" ng-click="submitPicks()">Submit Picks</button></p>
+		<div class="row">
+			<div class="col-md-12">
+				<p class="text-center">Tie Breaker</p>
+			</div>
+
+			<div role="group" data-toggle="buttons" aria-label="Tie-Breaker Options">
+
+				<div class="col-md-2 col-sm-3 col-xs-4">
+					<p>
+						<label
+							class="btn btn-block"
+							ng-class="{ 'btn-default': TieBreaker != 'ROCK', 'btn-info': TieBreaker == 'ROCK' }"
+							ng-disabled="Closed"
+							ng-model="TieBreaker"
+							btn-radio="'ROCK'">
+							<input type="radio" name="TieBreaker" value="ROCK" autocomplete="off" class="hide">
+							Rock
+						</label>
+					</p>
+				</div>
+
+				<div class="col-md-2 col-sm-3 col-xs-4">
+					<p>
+						<label
+							class="btn btn-block"
+							ng-class="{ 'btn-default': TieBreaker != 'PAPER', 'btn-info': TieBreaker == 'PAPER' }"
+							ng-disabled="Closed"
+							ng-model="TieBreaker"
+							btn-radio="'PAPER'">
+							<input type="radio" name="TieBreaker" value="PAPER" autocomplete="off" class="hide">
+							Paper
+						</label>
+					</p>
+				</div>
+
+				<div class="col-md-2 col-sm-3 col-xs-4">
+					<p>
+						<label
+							class="btn btn-block"
+							ng-class="{ 'btn-default': TieBreaker != 'SCISSORS', 'btn-info': TieBreaker == 'SCISSORS' }"
+							ng-disabled="Closed"
+							ng-model="TieBreaker"
+							btn-radio="'SCISSORS'">
+							<input type="radio" name="TieBreaker" value="SCISSORS" autocomplete="off" class="hide">
+							Scissors
+						</label>
+					</p>
+				</div>
+
+				<div class="col-md-2 col-sm-3 col-xs-4">
+					<p>
+						<label
+							class="btn btn-block"
+							ng-class="{ 'btn-default': TieBreaker != 'LIZARD', 'btn-info': TieBreaker == 'LIZARD' }"
+							ng-disabled="Closed"
+							ng-model="TieBreaker"
+							btn-radio="'LIZARD'">
+							<input type="radio" name="TieBreaker" value="LIZARD" autocomplete="off" class="hide">
+							Lizard
+						</label>
+					</p>
+				</div>
+
+				<div class="col-md-2 col-sm-3 col-xs-4">
+					<p>
+						<label
+							class="btn btn-block"
+							ng-class="{ 'btn-default': TieBreaker != 'SPOCK', 'btn-info': TieBreaker == 'SPOCK' }"
+							ng-disabled="Closed"
+							ng-model="TieBreaker"
+							btn-radio="'SPOCK'">
+							<input type="radio" name="TieBreaker" value="SPOCK" autocomplete="off" class="hide">
+							Spock
+						</label>
+					</p>
+				</div>
+
+			</div>
+
+			<div class="col-md-2 col-sm-3 col-xs-4">
+				<a href="http://www.recidivistsw.com/_Media/rockpaperscissorslizardspoc_med_hr.jpeg" class="btn btn-block btn-default">WTF</a>
+			</div>
+
 		</div>
+
 	</div>
-	-->
 
 </div>

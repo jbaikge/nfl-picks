@@ -52,13 +52,14 @@
 	}
 	body {
 		padding-top:70px;
+		padding-bottom:50px;
 	}
 	.rows-striped>.row:nth-of-type(odd) {
 		background:#{{ (Theme == '' || Theme == 'flatly') && 'F9F9F9' || '191919' }};
 	}
 	.rows-striped>.row {
 		padding-top:0.75em;
-		padding-bottom:0.75em;
+		xpadding-bottom:0.75em;
 		border-top:1px solid #DDD;
 	}
 	.btn-sized {
@@ -93,7 +94,6 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li ng-if="User"><a href="#/picks/submit">Submit Picks</a></li>
 				<li ng-if="User"><a href="#/picks/viewall">View Picks</a></li>
-				<li ng-if="User"><a href="#/standings">Standings</a></li>
 				<li ng-if="User"><a href="#/user/profile">Profile</a></li>
 				<li ng-if="!User"><a href="#/user/login">Login</a></li>
 			</ul>

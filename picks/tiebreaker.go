@@ -1,8 +1,8 @@
 package picks
 
 type TieBreaker struct {
-	GameId GameIdType
-	Value  string
+	Week  Week
+	Value string
 }
 
 func (t TieBreaker) Valid() bool {

@@ -26,6 +26,20 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 		}
 		return jsonrpc("Picks.Submit", p)
 	}
+
+	this.tiebreaker = function(userId, week, year, value) {
+		var t = {
+			UserId: userId,
+			TieBreaker: {
+				Week: {
+					Week: week,
+					Year: year
+				},
+				Value: value
+			}
+		}
+		return jsonrpc("TieBreaker.Submit", t)
+	}
 }])
 
 // submit.controller.js
@@ -34,9 +48,11 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 	"$scope",
 	"SubmitService",
 	function($rootScope, $scope, SubmitService) {
-		$scope.Lines = []
-		$scope.Picks = {}
-		$scope.Progress = {}
+		$scope.Week       = {}
+		$scope.Lines      = []
+		$scope.Picks      = {}
+		$scope.Progress   = {}
+		$scope.TieBreaker = ""
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
 			var o = { Home: 0, Away: 0, Over: 0, Under: 0 }
@@ -79,6 +95,20 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			$scope.Progress = o
 		}, true)
 
+		$scope.$watch("TieBreaker", function(newValue, oldValue) {
+			if (newValue == "") {
+				return
+			}
+
+			SubmitService.tiebreaker($rootScope.User.Id, $scope.Week.Week, $scope.Week.Year, newValue)
+				.success(function(data, status) {
+					console.log("SubmitService.tiebreaker", "data", data)
+				})
+				.error(function(data, status) {
+					console.log("SubmitService.tiebreaker", "data", data)
+				})
+		}, true)
+
 		$scope.submitPicks = function() {
 			var picks = []
 			var gameId
@@ -101,6 +131,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			.success(function(data, status) {
 				$scope.Week = data.result.Week
 				$scope.Lines = data.result.Lines
+				$scope.TieBreaker = data.result.TieBreaker.Value
 				var picks = data.result.Picks
 				if (picks == null) {
 					return
