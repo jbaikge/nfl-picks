@@ -58,7 +58,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 						updateScores(nextUpdate)
 					})
 
-				if (new Date($scope.Games[0].Start) > new Date) {
+				if (!$rootScope.User.IsAdmin && new Date($scope.Games[0].Start) > new Date) {
 					$log.log("Skipping:", new Date($scope.Games[0].Start), ">", new Date)
 					return
 				}
