@@ -29,7 +29,7 @@ func (s *Store) AllPicks(w Week) (picks map[GameIdType]map[string]Pick, err erro
 				picks.pick_value = games.team_id_away
 				AND games.game_score_away - games.game_spread >= games.game_score_home
 			) OR (
-				picks.pick_value = games.team_id_away
+				picks.pick_value = games.team_id_home
 				AND games.game_score_home + games.game_spread >= games.game_score_away
 			) OR (
 				picks.pick_value = 'UNDER'
