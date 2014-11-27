@@ -1,5 +1,9 @@
 package picks
 
+import (
+	"database/sql"
+)
+
 func (s *Store) AddTieBreaker(userId int64, t TieBreaker) (err error) {
 	tx, err := s.db.Begin()
 	if err != nil {
@@ -35,5 +39,8 @@ func (s *Store) UserTieBreaker(userId int64, w Week) (t TieBreaker, err error) {
 	`
 	row := s.db.QueryRow(query, userId, w.Week, w.Year)
 	err = row.Scan(&t.Week.Week, &t.Week.Year, &t.Value)
+	if err == sql.ErrNoRows {
+		err = nil
+	}
 	return
 }
