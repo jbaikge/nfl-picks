@@ -81,7 +81,7 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 					$rootScope.User = user
 					$rootScope.Theme = user.Theme
 					$cookieStore.put("User", user)
-					$location.path("/user/pick")
+					$location.path("/picks/submit")
 				}).error(function(data, status) {
 					$log.warn("error status: %s", status)
 					$log.warn("error data: ", data)
