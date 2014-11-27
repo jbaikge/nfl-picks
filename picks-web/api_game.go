@@ -100,8 +100,13 @@ func (api *Game) Scores(in *picks.Week, out *ScoresOut) (err error) {
 		}
 		// Game hasn't started yet
 		if s.Quarter == picks.Pregame {
-			if diff := s.Start.Sub(time.Now()); diff > 0 && diff < out.NextUpdate {
+			diff := s.Start.Sub(time.Now())
+			if diff > 0 && diff < out.NextUpdate {
 				out.NextUpdate = diff
+			}
+			// Handle delayed game start
+			if diff < 0 && diff > -5*time.Minute {
+				out.NextUpdate = time.Minute
 			}
 			continue
 		}
