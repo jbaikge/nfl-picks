@@ -14,6 +14,12 @@
 				<th ng-repeat="User in Users">{{ User }}</th>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="8" class="text-right">Wins</td>
+				<td ng-repeat="User in Users track by User">{{ Totals[User] || "0" }}</td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr ng-repeat="Game in Games track by Game.Line.GameId">
 				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Away.Id }">

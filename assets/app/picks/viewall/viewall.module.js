@@ -44,6 +44,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 		$scope.Games  = []
 		$scope.Picks  = {}
 		$scope.Scores = {}
+		$scope.Totals = {}
 
 		var updateScores = function(delay) {
 			$log.log("updateScores %d", delay)
@@ -66,6 +67,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 				ViewallService.picks()
 					.success(function(data) {
 						$scope.Picks = data.result.Picks
+						$scope.Totals = data.result.Totals
 					})
 			}
 			return $timeout(doUpdate, delay)

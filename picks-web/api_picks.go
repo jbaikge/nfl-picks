@@ -17,13 +17,22 @@ type AllIn struct {
 }
 
 type AllOut struct {
-	Week  picks.Week
-	Picks map[picks.GameIdType]map[string]picks.Pick
+	Week   picks.Week
+	Picks  map[picks.GameIdType]map[string]picks.Pick
+	Totals map[string]int
 }
 
-func (p *Picks) All(in *AllIn, out *AllOut) (err error) {
+func (api *Picks) All(in *AllIn, out *AllOut) (err error) {
 	if out.Picks, err = Store.AllPicks(in.Week); err != nil {
 		return
+	}
+	out.Totals = make(map[string]int)
+	for id := range out.Picks {
+		for username, pick := range out.Picks[id] {
+			if pick.Correct {
+				out.Totals[username]++
+			}
+		}
 	}
 	out.Week = in.Week
 	return
@@ -31,14 +40,11 @@ func (p *Picks) All(in *AllIn, out *AllOut) (err error) {
 
 // All Current
 
-func (p *Picks) AllCurrent(in *Nil, out *AllOut) (err error) {
+func (api *Picks) AllCurrent(in *Nil, out *AllOut) (err error) {
 	if out.Week, err = Store.CurrentWeek(); err != nil {
 		return
 	}
-	if out.Picks, err = Store.AllPicks(out.Week); err != nil {
-		return
-	}
-	return
+	return api.All(&AllIn{Week: out.Week}, out)
 }
 
 // Submit
@@ -53,7 +59,7 @@ type SubmitPickOut struct {
 	Saved bool
 }
 
-func (p *Picks) Submit(in *SubmitPickIn, out *SubmitPickOut) (err error) {
+func (api *Picks) Submit(in *SubmitPickIn, out *SubmitPickOut) (err error) {
 	out.Valid = make([]bool, len(in.Picks))
 	out.Saved = true
 	for i, pick := range in.Picks {
