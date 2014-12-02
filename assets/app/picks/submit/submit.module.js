@@ -89,6 +89,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				delete($scope.Picks.initial)
 				return
 			}
+			$scope.Progress = o
 
 			// Do not communicate with server if picking is closed
 			if ($scope.Closed) {
@@ -101,7 +102,6 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				.error(function(data, status) {
 					$log.log("SubmitService.submit", "status", status, "data", data)
 				})
-			$scope.Progress = o
 		}, true)
 
 		$scope.submitTieBreaker = function() {
