@@ -157,7 +157,7 @@ func (s *Store) Setup() (err error) {
 				user_id     SERIAL NOT NULL REFERENCES users (user_id),
 				tie_week    INTEGER NOT NULL DEFAULT 0,
 				tie_year    INTEGER NOT NULL DEFAULT 0,
-				tie_value   VARCHAR(8) NOT NULL,
+				tie_value   NUMERIC(5,2) NOT NULL DEFAULT 0.00,
 				tie_added   TIMESTAMP WITH TIME ZONE,
 				UNIQUE(user_id, tie_week, tie_year)
 			)`,

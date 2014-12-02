@@ -20,6 +20,7 @@ type AllOut struct {
 	Week   picks.Week
 	Picks  map[picks.GameIdType]map[string]picks.Pick
 	Totals map[string]int
+	Winner string
 }
 
 func (api *Picks) All(in *AllIn, out *AllOut) (err error) {
