@@ -39,12 +39,13 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 	"$timeout",
 	"ViewallService",
 	function($log, $rootScope, $scope, $timeout, ViewallService) {
-		$scope.Week   = {}
-		$scope.Users  = []
-		$scope.Games  = []
-		$scope.Picks  = {}
-		$scope.Scores = {}
-		$scope.Totals = {}
+		$scope.Week        = {}
+		$scope.Users       = []
+		$scope.Games       = []
+		$scope.Picks       = {}
+		$scope.Scores      = {}
+		$scope.Totals      = {}
+		$scope.TieBreakers = {}
 
 		var updateScores = function(delay) {
 			$log.log("updateScores %d", delay)
