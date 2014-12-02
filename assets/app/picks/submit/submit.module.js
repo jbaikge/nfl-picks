@@ -59,6 +59,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
+			if ($scope.Closed) {
+				return
+			}
+
 			var o = { Home: 0, Away: 0, Over: 0, Under: 0 }
 			var changed = []
 			for (var id in newValue) {
@@ -100,6 +104,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 		}, true)
 
 		$scope.$watch("TieBreaker", function(newValue, oldValue) {
+			if ($scope.Closed) {
+				return
+			}
+
 			if (newValue == "") {
 				return
 			}
