@@ -53,15 +53,12 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 		$scope.Lines      = []
 		$scope.Picks      = {}
 		$scope.Progress   = {}
-		$scope.TieBreaker = ""
+		$scope.TieBreaker = { Value: 0, Submitting: false, Submitted: false }
 
 		var now = new Date
 		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
-			if ($scope.Closed) {
-				return
-			}
 
 			var o = { Home: 0, Away: 0, Over: 0, Under: 0 }
 			var changed = []
@@ -93,6 +90,10 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 				return
 			}
 
+			// Do not communicate with server if picking is closed
+			if ($scope.Closed) {
+				return
+			}
 			SubmitService.submit($rootScope.User.Id, changed)
 				.success(function(data, status) {
 					$log.log("SubmitService", "data", data)
@@ -103,23 +104,24 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			$scope.Progress = o
 		}, true)
 
-		$scope.$watch("TieBreaker", function(newValue, oldValue) {
+		$scope.submitTieBreaker = function() {
+			$log.log("TieBreaker", $scope.TieBreaker)
 			if ($scope.Closed) {
-				return
+				// return
 			}
+			$scope.TieBreaker.Submitted = false
+			$scope.TieBreaker.Submitting = true
 
-			if (newValue == "") {
-				return
-			}
-
-			SubmitService.tiebreaker($rootScope.User.Id, $scope.Week.Week, $scope.Week.Year, newValue)
+			SubmitService.tiebreaker($rootScope.User.Id, $scope.Week.Week, $scope.Week.Year, $scope.TieBreaker.Value)
 				.success(function(data, status) {
+					$scope.TieBreaker.Submitted = true
+					$scope.TieBreaker.Submitting = false
 					$log.log("SubmitService.tiebreaker", "data", data)
 				})
 				.error(function(data, status) {
 					$log.log("SubmitService.tiebreaker", "data", data)
 				})
-		}, true)
+		}
 
 		$scope.submitPicks = function() {
 			var picks = []
@@ -143,7 +145,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 			.success(function(data, status) {
 				$scope.Week = data.result.Week
 				$scope.Lines = data.result.Lines
-				$scope.TieBreaker = data.result.TieBreaker.Value
+				$scope.TieBreaker.Value = data.result.TieBreaker.Value
 				var picks = data.result.Picks
 				if (picks == null) {
 					return
