@@ -107,7 +107,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 		$scope.submitTieBreaker = function() {
 			$log.log("TieBreaker", $scope.TieBreaker)
 			if ($scope.Closed) {
-				// return
+				return
 			}
 			$scope.TieBreaker.Submitted = false
 			$scope.TieBreaker.Submitting = true
