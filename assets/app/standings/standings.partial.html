@@ -1,0 +1,25 @@
+<div class="col-md-12">
+	<h1>Overall Standings</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Week</th>
+				<th ng-repeat="User in Users">{{ User }}</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td ng-repeat="User in Users track by User">{{ Totals[User] || "0" }}</td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr ng-repeat="Standing in Standings">
+				<td>{{ Standing.Week.Week }}</td>
+				<td ng-repeat="User in Users track by User">
+					{{ Standing.UserWins[User] }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
