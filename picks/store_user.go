@@ -5,16 +5,17 @@ import (
 	"fmt"
 )
 
-func (s *Store) UpdateUser(id int64, username string, pin int, theme string) (err error) {
+func (s *Store) UpdateUser(id int64, username string, beer string, pin int, theme string) (err error) {
 	query := `UPDATE users
 		SET
 			user_name  = $2,
-			user_pin   = $3,
-			user_theme = $4
+			user_beer  = $3,
+			user_pin   = $4,
+			user_theme = $5
 		WHERE
 			user_id   = $1
 	`
-	_, err = s.db.Exec(query, id, username, pin, theme)
+	_, err = s.db.Exec(query, id, username, beer, pin, theme)
 	return
 }
 
@@ -42,15 +43,15 @@ func (s *Store) Usernames() (usernames []string, err error) {
 	return
 }
 
-func (s *Store) UserValidate(username string, pin int) (userId int64, isAdmin bool, theme string, err error) {
-	query := `SELECT user_id, user_admin, user_theme
+func (s *Store) UserValidate(username string, pin int) (userId int64, isAdmin bool, theme string, beer string, err error) {
+	query := `SELECT user_id, user_admin, user_theme, user_beer
 		FROM users
 		WHERE
 			user_name    = $1
 			AND user_pin = $2
 		LIMIT 1
 	`
-	err = s.db.QueryRow(query, username, fmt.Sprintf("%04d", pin)).Scan(&userId, &isAdmin, &theme)
+	err = s.db.QueryRow(query, username, fmt.Sprintf("%04d", pin)).Scan(&userId, &isAdmin, &theme, &beer)
 	if err == sql.ErrNoRows {
 		err = fmt.Errorf("Invalid credentials")
 	}

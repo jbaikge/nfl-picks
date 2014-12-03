@@ -76,7 +76,8 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 						Id:       data.result.Id,
 						IsAdmin:  data.result.IsAdmin,
 						Username: data.result.Username,
-						Theme:    data.result.Theme
+						Theme:    data.result.Theme,
+						Beer:     data.result.Beer
 					}
 					$rootScope.User = user
 					$rootScope.Theme = user.Theme

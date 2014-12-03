@@ -22,10 +22,11 @@ type AuthOut struct {
 	IsAdmin  bool
 	Username string
 	Theme    string
+	Beer     string
 }
 
 func (api *User) Auth(in *AuthIn, out *AuthOut) (err error) {
-	out.Id, out.IsAdmin, out.Theme, err = Store.UserValidate(in.Username, in.PIN)
+	out.Id, out.IsAdmin, out.Theme, out.Beer, err = Store.UserValidate(in.Username, in.PIN)
 	out.Username = in.Username
 	return
 }
@@ -46,6 +47,7 @@ func (api *User) LastSeen(in *LastSeenIn, out *Nil) (err error) {
 type UpdateIn struct {
 	Id          int64
 	NewUsername string
+	Beer        string
 	OldPIN      int
 	NewPIN      int
 	Theme       string
@@ -67,7 +69,7 @@ func (api *User) Update(in *UpdateIn, out *Nil) (err error) {
 		err = fmt.Errorf("Incorrect PIN")
 		return
 	}
-	err = Store.UpdateUser(in.Id, in.NewUsername, in.NewPIN, in.Theme)
+	err = Store.UpdateUser(in.Id, in.NewUsername, in.Beer, in.NewPIN, in.Theme)
 	return
 }
 
