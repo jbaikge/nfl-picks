@@ -55,6 +55,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 		$scope.Progress   = {}
 		$scope.TieBreaker = { Value: 0, Submitting: false, Submitted: false }
 
+		// TODO - Turn this into an API call
 		var now = new Date
 		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
 

@@ -81,7 +81,14 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 					$rootScope.User = user
 					$rootScope.Theme = user.Theme
 					$cookieStore.put("User", user)
-					$location.path("/picks/submit")
+
+					var now = new Date
+					var open = (now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
+					if (open) {
+						$location.path("/picks/submit")
+					} else {
+						$location.path("/picks/viewall")
+					}
 				}).error(function(data, status) {
 					$log.warn("error status: %s", status)
 					$log.warn("error data: ", data)
