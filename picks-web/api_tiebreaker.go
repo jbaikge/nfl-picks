@@ -17,11 +17,11 @@ type AllTieBreakerIn struct {
 }
 
 type AllTieBreakerOut struct {
-	TieBreakers map[string]string
+	TieBreakers map[string]float64
 }
 
 func (api *TieBreaker) All(in *AllTieBreakerIn, out *AllTieBreakerOut) (err error) {
-
+	out.TieBreakers, err = Store.AllTieBreakers(in.Week)
 	return
 }
 
