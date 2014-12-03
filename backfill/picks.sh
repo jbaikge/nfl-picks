@@ -589,7 +589,6 @@ cat <<EOF > $TMP
 		{
 			"UserId": 4,
 			"Picks": [
-				{ "GameId": "GBvSEA@20140904",  "Value": ""      },
 				{ "GameId": "NOvATL@20140907",  "Value": "NO"    },
 				{ "GameId": "MINvSTL@20140907", "Value": "MIN"   },
 				{ "GameId": "CLEvPIT@20140907", "Value": "PIT"   },
