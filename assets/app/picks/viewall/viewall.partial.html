@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td colspan="8" class="text-right">Tie-Breaker</td>
-				<td ng-repeat="User in Users track by User">{{ Tiebreaker[User] || "0" }}</td>
+				<td ng-repeat="User in Users track by User">{{ TieBreakers[User] || "0" | number:1 }}</td>
 			</tr>
 		</tbody>
 	</table>

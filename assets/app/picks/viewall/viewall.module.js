@@ -29,6 +29,10 @@ angular.module("Picks.Picks.Viewall").service("ViewallService", ["jsonrpc", func
 	this.scores = function(year, week) {
 		return jsonrpc("Game.Scores", { Year: year, Week: week })
 	}
+
+	this.tiebreakers = function() {
+		return jsonrpc("TieBreaker.Current")
+	}
 }])
 
 // viewall.controller.js
@@ -77,6 +81,11 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.ViewallController",
 		ViewallService.users()
 			.success(function(data) {
 				$scope.Users = data.result.Usernames
+			})
+
+		ViewallService.tiebreakers()
+			.success(function(data) {
+				$scope.TieBreakers = data.result.TieBreakers
 			})
 
 		ViewallService.lines()
