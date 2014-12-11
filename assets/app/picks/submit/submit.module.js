@@ -57,7 +57,7 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 
 		// TODO - Turn this into an API call
 		var now = new Date
-		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
+		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 20)
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
 
