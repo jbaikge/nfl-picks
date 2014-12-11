@@ -3,19 +3,22 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th>Week</th>
+				<th></th>
 				<th ng-repeat="User in Users">{{ User }}</th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
 				<td></td>
-				<td ng-repeat="User in Users track by User">{{ Totals[User] || "0" }}</td>
+				<td ng-repeat="User in Users track by User">
+					{{ UserTotals[User] || "0" }}
+					<small class="text-muted">{{ UserTotals[User] / TotalPicks * 100 | number:2 }}%</small>
+				</td>
 			</tr>
 		</tfoot>
 		<tbody>
 			<tr ng-repeat="Standing in Standings">
-				<td>{{ Standing.Week.Week }}</td>
+				<td>Week {{ Standing.Week.Week }}</td>
 				<td ng-repeat="User in Users track by User">
 					{{ Standing.UserWins[User] }}
 				</td>

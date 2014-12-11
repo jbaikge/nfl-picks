@@ -29,8 +29,10 @@ angular.module("Picks.Standings").controller("Picks.StandingsController", [
 	"$scope",
 	"StandingsService",
 	function($rootScope, $scope, StandingsService) {
-		$scope.Users = []
-		$scope.Standings = {}
+		$scope.Users      = []
+		$scope.Standings  = []
+		$scope.UserTotals = {}
+		$scope.TotalPicks = 0
 
 		StandingsService.users()
 			.success(function(data) {
@@ -40,6 +42,16 @@ angular.module("Picks.Standings").controller("Picks.StandingsController", [
 		StandingsService.standings()
 			.success(function(data) {
 				$scope.Standings = data.result.Standings
+				for (var i = 0; i < $scope.Standings.length; i++) {
+					var s = $scope.Standings[i]
+					$scope.TotalPicks += s.TotalGames
+					for (var u in s.UserWins) {
+						if (isNaN($scope.UserTotals[u])) {
+							$scope.UserTotals[u] = 0
+						}
+						$scope.UserTotals[u] += s.UserWins[u]
+					}
+				}
 			})
 	}
 ])

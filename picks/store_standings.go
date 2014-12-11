@@ -27,6 +27,7 @@ func (s *Store) Standings(year int) (standings []WeekStanding, err error) {
 			LEFT JOIN users USING(user_id)
 		WHERE
 			games.game_year = $1
+			AND games.game_quarter = 'F'
 			AND (
 				(
 					picks.pick_value = games.team_id_away
