@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/jbaikge/nfl-picks/picks"
+	"time"
 )
 
 type Picks struct{}
@@ -46,6 +47,25 @@ func (api *Picks) AllCurrent(in *Nil, out *AllOut) (err error) {
 		return
 	}
 	return api.All(&AllIn{Week: out.Week}, out)
+}
+
+// Closed
+
+type ClosedOut struct {
+	Closed bool
+}
+
+func (api *Picks) Closed(in *Nil, out *ClosedOut) (err error) {
+	w, err := Store.CurrentWeek()
+	if err != nil {
+		return
+	}
+	t, err := Store.FirstGameTime(w)
+	if err != nil {
+		return
+	}
+	out.Closed = time.Now().After(t)
+	return
 }
 
 // Submit

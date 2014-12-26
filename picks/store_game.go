@@ -5,6 +5,20 @@ import (
 	"time"
 )
 
+func (s *Store) FirstGameTime(w Week) (t time.Time, err error) {
+	query := `SELECT
+			game_start
+		FROM games
+		WHERE
+			game_week     = $1
+			AND game_year = $2
+		ORDER BY game_start ASC
+		LIMIT 1
+	`
+	err = s.db.QueryRow(query, w.Week, w.Year).Scan(&t)
+	return
+}
+
 func (s *Store) NewGame(g *Game) (err error) {
 	query := `INSERT INTO games
 		(game_id, nfl_event_id, stadium_id, team_id_home, team_id_away, game_score_home, game_score_away, game_start, game_quarter, game_week, game_year, game_season)
