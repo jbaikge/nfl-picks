@@ -33,6 +33,7 @@ angular.module("Picks.Standings").controller("Picks.StandingsController", [
 		$scope.Standings  = []
 		$scope.UserTotals = {}
 		$scope.TotalPicks = 0
+		$scope.Wins       = {}
 
 		StandingsService.users()
 			.success(function(data) {
@@ -46,10 +47,19 @@ angular.module("Picks.Standings").controller("Picks.StandingsController", [
 					var s = $scope.Standings[i]
 					$scope.TotalPicks += s.TotalGames
 					for (var u in s.UserWins) {
+						// Total Wins tally
 						if (isNaN($scope.UserTotals[u])) {
 							$scope.UserTotals[u] = 0
 						}
 						$scope.UserTotals[u] += s.UserWins[u]
+
+						// Wins tally
+						if (isNaN($scope.Wins[u])) {
+							$scope.Wins[u] = 0
+						}
+						if (s.Winners.indexOf(u) > -1) {
+							$scope.Wins[u] += 1 / s.Winners.length
+						}
 					}
 				}
 			})

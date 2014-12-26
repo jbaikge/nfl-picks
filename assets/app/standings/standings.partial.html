@@ -4,22 +4,22 @@
 		<thead>
 			<tr class="text-muted">
 				<th></th>
-				<th width="30" ng-repeat="Standing in Standings">{{ Standing.Week.Week }}</th>
-				<th>Picks</th>
-				<th>Wins</th>
+				<th width="45" ng-repeat="Standing in Standings">{{ Standing.Week.Week }}</th>
+				<th width="100">Picks</th>
+				<th width="45">Wins</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="User in Users track by User">
 				<td>{{ User }}</td>
-				<td ng-repeat="Standing in Standings">
+				<td ng-repeat="Standing in Standings" ng-class="{ success: Standing.Winners.indexOf(User) > -1 }">
 					{{ Standing.UserWins[User] }}
 				</td>
 				<td class="text-center">
 					{{ UserTotals[User] || "0" }} <span class="text-muted">/ {{ TotalPicks }}</span>
 					<!-- <div><small class="text-muted">{{ UserTotals[User] / TotalPicks * 100 | number:2 }}%</small></div> -->
 				</td>
-				<td>0</td>
+				<td>{{ Wins[User] | number:1 }}</td>
 			</tr>
 		</tbody>
 	</table>
