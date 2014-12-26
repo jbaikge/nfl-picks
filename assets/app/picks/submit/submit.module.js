@@ -19,6 +19,10 @@ angular.module("Picks.Picks.Submit").service("SubmitService", ["jsonrpc", functi
 		return jsonrpc("Lines.Current", {UserId: userId})
 	}
 
+	this.picksClosed = function() {
+		return jsonrpc("Picks.Closed")
+	}
+
 	this.submit = function(userId, picks) {
 		var p = {
 			UserId: userId,
@@ -49,15 +53,27 @@ angular.module("Picks.Picks.Submit").controller("Picks.Picks.SubmitController", 
 	"$scope",
 	"SubmitService",
 	function($log, $rootScope, $scope, SubmitService) {
+		$scope.Closed     = true
 		$scope.Week       = {}
 		$scope.Lines      = []
 		$scope.Picks      = {}
 		$scope.Progress   = {}
 		$scope.TieBreaker = { Value: 0, Submitting: false, Submitted: false }
 
-		// TODO - Turn this into an API call
-		var now = new Date
-		$scope.Closed = !(now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 20)
+		var updateClosed = function() {
+			SubmitService.picksClosed()
+				.success(function(data, status) {
+					$scope.Closed = data.Closed
+					if ($scope.Closed == false) {
+						$timeout(updateClosed, 60 * 1000)
+					}
+				})
+				.error(function(data, status) {
+					$log.warn("error status: %s", status)
+					$log.warn("error data: ", data)
+				})
+		}
+		updateClosed()
 
 		$scope.$watch("Picks", function(newValue, oldValue) {
 

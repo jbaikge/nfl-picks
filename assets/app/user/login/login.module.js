@@ -25,6 +25,10 @@ angular.module("Picks.User.Login").service("LoginService", ["jsonrpc", function(
 	this.usernames = function() {
 		return jsonrpc("User.Usernames")
 	}
+
+	this.picksClosed = function() {
+		return jsonrpc("Picks.Closed")
+	}
 }])
 
 // login.controller.js
@@ -39,8 +43,18 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 		var defaultOption = "Select Your Name..."
 
 		$scope.Form = {}
-
+		$scope.PicksClosed = true
 		$scope.Usernames = []
+
+		LoginService.picksClosed()
+			.success(function(data, status) {
+				$scope.PicksClosed = data.Closed
+			})
+			.error(function(data, status) {
+				$log.warn("error status: %s", status)
+				$log.warn("error data: ", data)
+			})
+
 		LoginService.usernames()
 			.success(function(data, status) {
 				$scope.Usernames = data.result.Usernames
@@ -83,12 +97,10 @@ angular.module("Picks.User.Login").controller("Picks.User.LoginController", [
 					$rootScope.Theme = user.Theme
 					$cookieStore.put("User", user)
 
-					var now = new Date
-					var open = (now.getDay() == 3 && now.getHours() >= 17 || now.getDay() == 4 && now.getHours() <= 12)
-					if (open) {
-						$location.path("/picks/submit")
-					} else {
+					if ($scope.PicksClosed) {
 						$location.path("/picks/viewall")
+					} else {
+						$location.path("/picks/submit")
 					}
 				}).error(function(data, status) {
 					$log.warn("error status: %s", status)
