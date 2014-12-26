@@ -2,26 +2,24 @@
 	<h1>Overall Standings</h1>
 	<table class="table table-striped">
 		<thead>
-			<tr>
+			<tr class="text-muted">
 				<th></th>
-				<th ng-repeat="User in Users">{{ User }}</th>
+				<th width="30" ng-repeat="Standing in Standings">{{ Standing.Week.Week }}</th>
+				<th>Picks</th>
+				<th>Wins</th>
 			</tr>
 		</thead>
-		<tfoot>
-			<tr>
-				<td></td>
-				<td ng-repeat="User in Users track by User">
-					{{ UserTotals[User] || "0" }}
-					<small class="text-muted">{{ UserTotals[User] / TotalPicks * 100 | number:2 }}%</small>
-				</td>
-			</tr>
-		</tfoot>
 		<tbody>
-			<tr ng-repeat="Standing in Standings">
-				<td>Week {{ Standing.Week.Week }}</td>
-				<td ng-repeat="User in Users track by User">
+			<tr ng-repeat="User in Users track by User">
+				<td>{{ User }}</td>
+				<td ng-repeat="Standing in Standings">
 					{{ Standing.UserWins[User] }}
 				</td>
+				<td class="text-center">
+					{{ UserTotals[User] || "0" }} <span class="text-muted">/ {{ TotalPicks }}</span>
+					<!-- <div><small class="text-muted">{{ UserTotals[User] / TotalPicks * 100 | number:2 }}%</small></div> -->
+				</td>
+				<td>0</td>
 			</tr>
 		</tbody>
 	</table>
