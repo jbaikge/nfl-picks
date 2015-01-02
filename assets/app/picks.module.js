@@ -7,6 +7,7 @@ angular.module("Picks", [
 	"quarter",
 	"Picks.Picks.Viewall",
 	"Picks.Picks.Submit",
+	"Picks.Picks.Submitall",
 	"Picks.Standings",
 	"Picks.User.Login",
 	"Picks.User.Profile",
