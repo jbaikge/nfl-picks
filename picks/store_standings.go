@@ -57,6 +57,7 @@ func (s *Store) Standings(year int) (standings []WeekStanding, err error) {
 			)
 		WHERE
 			games.game_year = $1
+			AND users.user_can_win = TRUE
 			AND games.game_quarter IN('F', 'FO')
 			AND (
 				(
@@ -104,7 +105,7 @@ func (s *Store) Standings(year int) (standings []WeekStanding, err error) {
 
 	// Determine winners, hit up tie-breaker if necessary
 
-	queryWeeks := `SELECT game_week, COUNT(*) FROM games WHERE game_year = $1 GROUP BY game_week ORDER BY game_week`
+	queryWeeks := `SELECT game_week, COUNT(NULLIF(game_quarter, 'P')) FROM games WHERE game_year = $1 GROUP BY game_week ORDER BY game_week`
 	if rows, err = s.db.Query(queryWeeks, year); err != nil {
 		return
 	}
