@@ -17,6 +17,10 @@ type OverallOut struct {
 }
 
 func (api *Standings) Overall(in *Nil, out *OverallOut) (err error) {
-	out.Standings, err = Store.Standings(2014)
+	w, err := Store.CurrentWeek()
+	if err != nil {
+		return
+	}
+	out.Standings, err = Store.Standings(w.Year)
 	return
 }
