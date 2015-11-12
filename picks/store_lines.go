@@ -15,6 +15,33 @@ func (s *Store) CurrentPickLines() (w Week, lines []*PickLine, err error) {
 }
 
 func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
+	standingsQueryF := `SELECT
+			team_id,
+			COALESCE(COUNT(NULLIF(win, FALSE)), 0) AS wins,
+			COALESCE(COUNT(NULLIF(win, TRUE)), 0) AS losses
+		FROM
+			(
+				SELECT
+					team_id_home AS team_id,
+					game_year,
+					game_week,
+					game_score_home > game_score_away AS win
+				FROM
+					games
+				UNION ALL
+				SELECT
+					team_id_away,
+					game_year,
+					game_week,
+					game_score_away > game_score_home
+				FROM games
+			) AS t
+		WHERE
+			game_week     < %d
+			AND game_year = %d
+		GROUP BY team_id
+	`
+	standingsQuery := fmt.Sprintf(standingsQueryF, w.Week, w.Year)
 	query := `SELECT
 			game_start,
 			game_id,
@@ -26,11 +53,15 @@ func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 			homeTeam.team_name,
 			homeTeam.team_league,
 			homeTeam.team_division,
+			homeStandings.wins,
+			homeStandings.losses,
 			awayTeam.team_id,
 			awayTeam.team_city,
 			awayTeam.team_name,
 			awayTeam.team_league,
 			awayTeam.team_division,
+			awayStandings.wins,
+			awayStandings.losses,
 			stadiums.stadium_id,
 			stadiums.stadium_name,
 			stadiums.stadium_city,
@@ -41,6 +72,8 @@ func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 			LEFT JOIN stadiums USING(stadium_id)
 			LEFT JOIN teams AS homeTeam ON(games.team_id_home = homeTeam.team_id)
 			LEFT JOIN teams AS awayTeam ON(games.team_id_away = awayTeam.team_id)
+			LEFT JOIN (` + standingsQuery + `) AS homeStandings ON(games.team_id_home = homeStandings.team_id)
+			LEFT JOIN (` + standingsQuery + `) AS awayStandings ON(games.team_id_away = awayStandings.team_id)
 		WHERE
 			game_week     = $1
 			AND game_year = $2
@@ -68,11 +101,15 @@ func (s *Store) PickLines(w Week) (lines []*PickLine, err error) {
 			&l.Home.Name,
 			&l.Home.League,
 			&l.Home.Division,
+			&l.Home.Wins,
+			&l.Home.Losses,
 			&l.Away.Id,
 			&l.Away.City,
 			&l.Away.Name,
 			&l.Away.League,
 			&l.Away.Division,
+			&l.Away.Wins,
+			&l.Away.Losses,
 			&l.Stadium.Id,
 			&l.Stadium.Name,
 			&l.Stadium.City,

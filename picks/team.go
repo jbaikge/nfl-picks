@@ -6,6 +6,8 @@ type Team struct {
 	City     string
 	League   string
 	Division string
+	Wins     int
+	Losses   int
 }
 
 type TeamScore struct {

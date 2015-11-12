@@ -4,9 +4,11 @@
 		<thead>
 			<tr>
 				<th class="text-right">Away</th>
+				<th class="sr-only">Away Rank</th>
 				<th><span class="sr-only">Away Score</span></th>
 				<th class="text-center text-muted">@</th>
 				<th><span class="sr-only">Home Score</span></th>
+				<th class="sr-only">Home Rank</th>
 				<th>Home</th>
 				<th><span class="sr-only">Spread</span></th>
 				<th><span class="sr-only">Over/Under</span></th>
@@ -25,6 +27,9 @@
 				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Away.Id }">
 					<span class="text-nowrap">{{ Game.Away.City }} {{ Game.Away.Name }}</span>
 				</td>
+				<td class="sr-only">
+					<div class="small text-muted">{{ Game.Away.Wins }}-{{ Game.Away.Losses }}</div>
+				</td>
 				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Away.Id }">
 					{{ Scores[Game.Line.GameId].AwayScore }}
 				</td>
@@ -34,6 +39,9 @@
 				</td>
 				<td class="text-right" ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Home.Id }">
 					{{ Scores[Game.Line.GameId].HomeScore }}
+				</td>
+				<td class="sr-only">
+					<div class="small text-muted">{{ Game.Home.Wins }}-{{ Game.Home.Losses }}</div>
 				</td>
 				<td ng-class="{ 'info': Scores[Game.Line.GameId].Posession == Game.Home.Id }">
 					<span class="text-nowrap">{{ Game.Home.City }} {{ Game.Home.Name }}</span>
@@ -52,7 +60,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="8" class="text-right">Tie-Breaker</td>
+				<td colspan="10" class="text-right">Tie-Breaker</td>
 				<td ng-repeat="User in Users track by User">{{ TieBreakers[User] || "0" | number:1 }}</td>
 			</tr>
 		</tbody>
